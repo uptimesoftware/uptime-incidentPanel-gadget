@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+  <ModulePrefs title="Incident Panel" 
+  description="Display current system or monitor incidents."
+          thumbnail="thumb.png"
+  /> 
+  <Content type="html">
+<![CDATA[ 
+<html>
+<head>
+	#includeResources(uptimecss,jquery,jqueryUi)
+	<title>Incident Panel</title>
+	
+	<link rel="stylesheet" type="text/css"
+		href="__UPTIME_GADGET_BASE__/incidentPanel.css" />
+	<script type="text/javascript"
+		src="__UPTIME_GADGET_BASE__/incidentPanel.js">
+	</script>
+</head>
+
+<body>
+
+	<div id="editPanel">
+	</div>
+
+	<div id="incidentPanel">
+	</div>
+
+	<span style="position: fixed" id="incidentPanelTooltip"></span>
+
+</body>
+</html>
+]]>
+  </Content> 
+</Module>
