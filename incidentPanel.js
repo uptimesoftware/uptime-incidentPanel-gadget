@@ -15,20 +15,23 @@ uptimeGadget.registerOnLoadHandler(function(onLoadData) {
 
 uptimeGadget.registerOnEditHandler(showEditPanel);
 
+$(function() {
+	$("#editPanel").hide();
+});
+
 function renderIncidentPanel(settings) {
 	$("#incidentPanel").html('<p>TODO render table ' + setIntervalId + '</p>');
 }
 
 function showEditPanel() {
 	populateEditPanelGroups();
-	$("#editPanel").slideDown();
+	$("#editPanel").show();
 }
 
 function onLoadSettingsSuccess(settings) {
 	if (settings) {
 		$.extend(incidentPanelSettings, settings);
 	}
-	$("#editPanel").hide();
 	initEditPanel();
 
 	var statusBar = $("#statusBar");
@@ -85,6 +88,10 @@ function initEditPanel() {
 		var min = parseInt(refreshRate.attr("min"));
 		var max = parseInt(refreshRate.attr("max"));
 		var val = parseInt(refreshRate.val());
+		if (isNaN(val)) {
+			val = 10;
+			refreshRate.val(10);
+		}
 		if (val < min) {
 			refreshRate.val(min);
 		}
