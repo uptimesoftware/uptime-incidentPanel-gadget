@@ -32,6 +32,10 @@ function showEditPanel() {
 	$("#editPanel").slideDown();
 }
 
+function hideEditPanel() {
+	$("#editPanel").slideUp();
+}
+
 function onLoadSettingsSuccess(settings) {
 	if (settings) {
 		$.extend(incidentPanelSettings, settings);
@@ -113,7 +117,7 @@ function initEditPanel() {
 	});
     $("#closeButton").button().click(function() {
     	saveSettings();
-		$("#editPanel").hide();
+		hideEditPanel();
 	});
 }
 
