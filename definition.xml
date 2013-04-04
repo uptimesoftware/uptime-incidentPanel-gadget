@@ -12,7 +12,15 @@
 	<title>Incident Panel</title>
 	
 	<link rel="stylesheet" type="text/css"
+		href="__UPTIME_GADGET_BASE__/number-polyfill.css" />
+	<link rel="stylesheet" type="text/css"
 		href="__UPTIME_GADGET_BASE__/incidentPanel.css" />
+	<script type="text/javascript"
+		src="__UPTIME_GADGET_BASE__/jquery.ba-throttle-debounce.min.js">
+	</script>
+	<script type="text/javascript"
+		src="__UPTIME_GADGET_BASE__/number-polyfill.js">
+	</script>
 	<script type="text/javascript"
 		src="__UPTIME_GADGET_BASE__/incidentPanel.js">
 	</script>
@@ -20,10 +28,31 @@
 
 <body>
 
-	<div id="editPanel">
+	<div id="editPanel" class="editPanel">
+		<div class="contentType">
+			Display incidents for:
+			<input type="radio" class="radio" name="contentType" value="elements" id="elementsRadio" />
+			<label for="elementsRadio">Elements</label>
+			<input type="radio" class="radio" name="contentType" value="monitors" id="monitorsRadio" />
+			<label for="monitorsRadio">Monitors</label>
+		</div>
+		<div class="groups">
+			<label for="groups">Display Groups (including subgroups):</label>
+			<select id="groups" />
+		</div>
+		<div class="refreshRate">
+			<label for="refreshRate">Refresh Rate (s):</label>
+			<input id="refreshRate" type="number" min="5" max="300" value="10" />
+		</div>
 	</div>
 
+	<div id="statusBar"
+		style="display: none; width: 100%; font-weight: bold; font-size: larger;">
+		Backend Call Status
+	</div>
+	
 	<div id="incidentPanel">
+	TODO
 	</div>
 
 	<span style="position: fixed" id="incidentPanelTooltip"></span>
