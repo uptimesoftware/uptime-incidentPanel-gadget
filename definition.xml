@@ -44,6 +44,9 @@
 			<label for="refreshRate">Refresh Rate (s):</label>
 			<input id="refreshRate" type="number" min="5" max="300" value="10" />
 		</div>
+		<div class="closeButton">
+			<button id="closeButton">Close</button>
+		</div>
 	</div>
 
 	<div id="statusBar"

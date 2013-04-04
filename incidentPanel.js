@@ -4,6 +4,7 @@ var incidentPanelSettings = {
 	"refreshInterval" : 10
 };
 var setIntervalId;
+var showEditPanelOnDocLoad = false;
 
 uptimeGadget.registerOnLoadHandler(function(onLoadData) {
 	if (onLoadData.hasPreloadedSettings()) {
@@ -17,6 +18,9 @@ uptimeGadget.registerOnEditHandler(showEditPanel);
 
 $(function() {
 	$("#editPanel").hide();
+	if (showEditPanelOnDocLoad) {
+		showEditPanel();
+	}
 });
 
 function renderIncidentPanel(settings) {
@@ -25,7 +29,7 @@ function renderIncidentPanel(settings) {
 
 function showEditPanel() {
 	populateEditPanelGroups();
-	$("#editPanel").show();
+	$("#editPanel").slideDown();
 }
 
 function onLoadSettingsSuccess(settings) {
@@ -42,7 +46,7 @@ function onLoadSettingsSuccess(settings) {
 	resetUpdateInterval();
 	
 	if (!settings) {
-		showEditPanel();
+		showEditPanelOnDocLoad = true;
 	}
 }
 
@@ -81,6 +85,7 @@ function initEditPanel() {
     	incidentPanelSettings.contentType = $(this).val();
     	saveSettings();
     });
+    $('div.contentType').buttonset();
     var refreshRate = $("#refreshRate");
     refreshRate.val(incidentPanelSettings.refreshInterval);
     refreshRate.change($.debounce(500, function() {
@@ -90,8 +95,8 @@ function initEditPanel() {
 		var val = parseInt(refreshRate.val());
 		if (isNaN(val)) {
 			val = 10;
-			refreshRate.val(10);
 		}
+		refreshRate.val(val);
 		if (val < min) {
 			refreshRate.val(min);
 		}
@@ -105,6 +110,10 @@ function initEditPanel() {
     $("#groups").change(function() {
 		incidentPanelSettings.groupIdFilter = $(this).val();
     	saveSettings();
+	});
+    $("#closeButton").button().click(function() {
+    	saveSettings();
+		$("#editPanel").hide();
 	});
 }
 
