@@ -64,6 +64,8 @@ function onLoadSettingsSuccess(settings) {
 function resetUpdateInterval() {
 	if (setIntervalId) {
 		clearInterval(setIntervalId);
+	} else {
+		renderIncidentPanel(incidentPanelSettings);
 	}
 	setIntervalId = setInterval(function() {
 		renderIncidentPanel(incidentPanelSettings);
