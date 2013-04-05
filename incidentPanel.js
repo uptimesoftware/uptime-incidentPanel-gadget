@@ -24,7 +24,14 @@ $(function() {
 });
 
 function renderIncidentPanel(settings) {
-	$("#incidentPanel").html('<p>TODO render table ' + setIntervalId + '</p>');
+	var message = '<p>TODO render table ' + setIntervalId + '</p>';
+	getIdsIn(settings.groupIdFilter, settings.contentType, function(ids) {
+		message += "<p>Got ids: " + ids + "</p>";
+		$("#incidentPanel").html(message);
+	}, function() {
+		message += "<p>getIdsIn returned an error</p>";
+		$("#incidentPanel").html(message);
+	});
 }
 
 function showEditPanel() {
@@ -48,7 +55,7 @@ function onLoadSettingsSuccess(settings) {
 	statusBar.show().fadeOut(2000);
 
 	resetUpdateInterval();
-	
+
 	if (!settings) {
 		showEditPanelOnDocLoad = true;
 	}
@@ -74,7 +81,7 @@ function populateEditPanelGroups() {
 			});
 			groups.val(incidentPanelSettings.groupIdFilter);
 		},
-		error: function(jqXHR, textStatus, errorThrown) {
+		error : function(jqXHR, textStatus, errorThrown) {
 			groups.val(-1);
 		}
 	});
@@ -82,17 +89,17 @@ function populateEditPanelGroups() {
 
 function initEditPanel() {
 	var contentTypes = $('input:radio[name=contentType]');
-    if(contentTypes.is(':checked') === false) {
-        contentTypes.filter('[value=' + incidentPanelSettings.contentType + ']').prop('checked', true);
-    }
-    contentTypes.change(function() {
-    	incidentPanelSettings.contentType = $(this).val();
-    	saveSettings();
-    });
-    $('div.contentType').buttonset();
-    var refreshRate = $("#refreshRate");
-    refreshRate.val(incidentPanelSettings.refreshInterval);
-    refreshRate.change($.debounce(500, function() {
+	if (contentTypes.is(':checked') === false) {
+		contentTypes.filter('[value=' + incidentPanelSettings.contentType + ']').prop('checked', true);
+	}
+	contentTypes.change(function() {
+		incidentPanelSettings.contentType = $(this).val();
+		saveSettings();
+	});
+	$('div.contentType').buttonset();
+	var refreshRate = $("#refreshRate");
+	refreshRate.val(incidentPanelSettings.refreshInterval);
+	refreshRate.change($.debounce(500, function() {
 		var refreshRate = $(this);
 		var min = parseInt(refreshRate.attr("min"));
 		var max = parseInt(refreshRate.attr("max"));
@@ -109,14 +116,14 @@ function initEditPanel() {
 		}
 		incidentPanelSettings.refreshInterval = val;
 		resetUpdateInterval();
-    	saveSettings();
+		saveSettings();
 	}));
-    $("#groups").change(function() {
+	$("#groups").change(function() {
 		incidentPanelSettings.groupIdFilter = $(this).val();
-    	saveSettings();
+		saveSettings();
 	});
-    $("#closeButton").button().click(function() {
-    	saveSettings();
+	$("#closeButton").button().click(function() {
+		saveSettings();
 		hideEditPanel();
 	});
 }
@@ -126,7 +133,7 @@ function saveSettings() {
 }
 
 function onSaveSuccess(savedSettings) {
-	
+
 }
 
 function onError(errorObject) {
