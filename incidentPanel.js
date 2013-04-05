@@ -25,8 +25,11 @@ $(function() {
 
 function renderIncidentPanel(settings) {
 	var message = '<p>TODO render table ' + setIntervalId + '</p>';
-	getIdsIn(settings.groupIdFilter, settings.contentType, function(ids) {
-		message += "<p>Got ids: " + ids + "</p>";
+	message += "<p>Group Id: " + settings.groupIdFilter + "</p>";
+	getStatusesIn(settings.groupIdFilter, settings.contentType, function(results) {
+		$.each(results, function(i, status) {
+			message += "<p>" + settings.contentType + " " + status.id + ": " + status.name + " " + status.status + "</p>";
+		});
 		$("#incidentPanel").html(message);
 	}, function() {
 		message += "<p>getIdsIn returned an error</p>";
