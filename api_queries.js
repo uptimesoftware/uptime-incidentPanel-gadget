@@ -43,23 +43,24 @@ function getIndentPrefix(prefix, repeat) {
 	return repeatedPrefix;
 }
 
-function getGroupNames(onSuccess, onError) {
+function getGroupNames(groupId, onSuccess, onError) {
 	$.ajax("/api/v1/groups", {
 		cache : false,
 		success : function(data, textStatus, jqXHR) {
-			var groupTreeInfo = buildGroupTree(data);
-			if (!groupTreeInfo) {
+			var groupTree = getGroupTree(groupId, data);
+			if (!groupTree) {
 				onError();
 				return;
 			}
 			var groups = [];
-			tree_walk(groupTreeInfo.rootTree, function(group, depth) {
+			var depthOffset = (groupId < 0) ? -1 : 0;
+			tree_walk(groupTree, function(group, depth) {
 				if (!group) {
 					return;
 				}
 				groups.push({
 					id : group.id,
-					name : getIndentPrefix("-", depth - 1) + group.name
+					name : getIndentPrefix("-", depth + depthOffset) + group.name
 				});
 			});
 			onSuccess(groups);

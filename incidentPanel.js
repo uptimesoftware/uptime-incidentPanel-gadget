@@ -24,18 +24,32 @@ $(function() {
 });
 
 function renderIncidentPanel(settings) {
+	$("#incidentPanelGadget").tooltip();
+	getGroupNames(settings.groupIdFilter, function(groups) {
+		var groupsMarkup = "";
+		$.each(groups, function(i, group) {
+			groupsMarkup += group.name + "<br/>";
+		});
+		if (settings.groupIdFilter < 0) {
+			$("#incidentPanelGroup").html("Group: All").prop('title', groupsMarkup);
+			return;
+		}
+		$("#incidentPanelGroup").html("Group: " + groups[0].name).prop('title', groupsMarkup);
+	}, function() {
+		$("#incidentPanelGroup").html("Could not load groups");
+	});
 	var message = '<p>TODO render table ' + setIntervalId + '</p>';
-	message += "<p>Group Id: " + settings.groupIdFilter + "</p>";
 	getIncidentsIn(settings.groupIdFilter, settings.contentType, function(results) {
 		var elementIdField = settings.contentType == "elements" ? "id" : "elementId";
 		$.each(results.incidents, function(i, status) {
 			var element = results.elements[status[elementIdField]];
-			message += "<p>" + settings.contentType + " " + status.id + ": " + element.type + " " + element.typeSubtype + " " + element.name + " " + status.name + " " + status.status + "</p>";
+			message += "<p>" + settings.contentType + " " + status.id + ": " + element.type + " " + element.typeSubtype + " "
+					+ element.name + " " + status.name + " " + status.status + "</p>";
 		});
-		$("#incidentPanel").html(message);
+		$("#incidentPanelTable").html(message);
 	}, function() {
 		message += "<p>getStatusesIn returned an error</p>";
-		$("#incidentPanel").html(message);
+		$("#incidentPanelTable").html(message);
 	});
 }
 
@@ -80,7 +94,7 @@ function resetUpdateInterval() {
 function populateEditPanelGroups() {
 	var groups = $("#groups");
 	groups.find('option').remove().end().append($("<option />").val(-1).text("All"));
-	getGroupNames(function(data) {
+	getGroupNames(-1, function(data) {
 		$.each(data, function(i, group) {
 			groups.append($("<option />").val(group.id).text(group.name));
 		});

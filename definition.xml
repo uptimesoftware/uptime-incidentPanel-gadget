@@ -34,34 +34,39 @@
 
 <body>
 
-	<div id="editPanel" class="editPanel">
-		<div class="contentType">
-			Display incidents for:
-			<input type="radio" class="radio" name="contentType" value="elements" id="elementsRadio" />
-			<label for="elementsRadio">Elements</label>
-			<input type="radio" class="radio" name="contentType" value="monitors" id="monitorsRadio" />
-			<label for="monitorsRadio">Monitors</label>
+	<div id="incidentPanelGadget">
+		<div id="editPanel" class="editPanel">
+			<div class="contentType">
+				Display incidents for:
+				<input type="radio" class="radio" name="contentType" value="elements" id="elementsRadio" />
+				<label for="elementsRadio">Elements</label>
+				<input type="radio" class="radio" name="contentType" value="monitors" id="monitorsRadio" />
+				<label for="monitorsRadio">Monitors</label>
+			</div>
+			<div class="groups">
+				<label for="groups">Display Groups (including subgroups):</label>
+				<select id="groups" />
+			</div>
+			<div class="refreshRate">
+				<label for="refreshRate">Refresh Interval (s):</label>
+				<input id="refreshRate" type="number" min="5" max="300" value="10" />
+			</div>
+			<div class="closeButton">
+				<button id="closeButton">Close</button>
+			</div>
 		</div>
-		<div class="groups">
-			<label for="groups">Display Groups (including subgroups):</label>
-			<select id="groups" />
-		</div>
-		<div class="refreshRate">
-			<label for="refreshRate">Refresh Interval (s):</label>
-			<input id="refreshRate" type="number" min="5" max="300" value="10" />
-		</div>
-		<div class="closeButton">
-			<button id="closeButton">Close</button>
-		</div>
-	</div>
-
-	<div id="statusBar"
-		style="display: none; width: 100%; font-weight: bold; font-size: larger;">
-		Backend Call Status
-	</div>
 	
-	<div id="incidentPanel">
-	TODO
+		<div id="statusBar"
+			style="display: none; width: 100%; font-weight: bold; font-size: larger;">
+			Backend Call Status
+		</div>
+		
+		<div id="incidentPanel">
+			<div id="incidentPanelGroup">
+			</div>
+			<div id="incidentPanelTable">
+			</div>
+		</div>
 	</div>
 
 	<span style="position: fixed" id="incidentPanelTooltip"></span>
