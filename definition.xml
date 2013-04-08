@@ -47,7 +47,7 @@
 			<select id="groups" />
 		</div>
 		<div class="refreshRate">
-			<label for="refreshRate">Refresh Rate (s):</label>
+			<label for="refreshRate">Refresh Interval (s):</label>
 			<input id="refreshRate" type="number" min="5" max="300" value="10" />
 		</div>
 		<div class="closeButton">

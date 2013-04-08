@@ -57,7 +57,10 @@ function getGroupNames(onSuccess, onError) {
 				if (!group) {
 					return;
 				}
-				groups.push({id: group.id, name: getIndentPrefix("-", depth - 1) + group.name});
+				groups.push({
+					id : group.id,
+					name : getIndentPrefix("-", depth - 1) + group.name
+				});
 			});
 			onSuccess(groups);
 		},
@@ -118,4 +121,61 @@ function getStatusesIn(groupId, idName, onSuccess, onError) {
 			onError();
 		}
 	});
+}
+
+function getElements(ids, onSuccess, onError) {
+	if (!ids) {
+		onError();
+		return;
+	}
+	var elements = {};
+	var deferreds = [];
+	$.each(ids, function(i, id) {
+		deferreds.push($.ajax("/api/v1/elements/" + id, {
+			cache : false,
+			success : function(data, textStatus, jqXHR) {
+				elements[data.id] = data;
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				onError();
+			}
+		}));
+	});
+	$.when.apply($, deferreds).done(function() {
+		onSuccess(elements);
+	});
+}
+
+function uniq(arr) {
+	var seen = {};
+	return $.map(arr, function(item, i) {
+		if (seen[item]) {
+			return null;
+		}
+		seen[item] = 1;
+		return item;
+	});
+}
+
+function getIncidentsIn(groupId, idName, onSuccess, onError) {
+	if (!groupId) {
+		onError();
+		return;
+	}
+	if (idName != "elements" && idName != "monitors") {
+		onError();
+		return;
+	}
+	var idField = (idName == "elements") ? "id" : "elementId";
+	getStatusesIn(groupId, idName, function(results) {
+		var statusesToShow = $.map(results, function(status, i) {
+			return ("OK" == status.status) ? null : status;
+		});
+		var elementIds = uniq($.map(statusesToShow, function(status, i) {
+			return status[idField];
+		}));
+		getElements(elementIds, function(elems) {
+			onSuccess({incidents: statusesToShow, elements: elems});
+		}, onError);
+	}, onError);
 }

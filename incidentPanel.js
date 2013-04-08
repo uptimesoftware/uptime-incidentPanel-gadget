@@ -26,9 +26,11 @@ $(function() {
 function renderIncidentPanel(settings) {
 	var message = '<p>TODO render table ' + setIntervalId + '</p>';
 	message += "<p>Group Id: " + settings.groupIdFilter + "</p>";
-	getStatusesIn(settings.groupIdFilter, settings.contentType, function(results) {
-		$.each(results, function(i, status) {
-			message += "<p>" + settings.contentType + " " + status.id + ": " + status.name + " " + status.status + "</p>";
+	getIncidentsIn(settings.groupIdFilter, settings.contentType, function(results) {
+		var elementIdField = settings.contentType == "elements" ? "id" : "elementId";
+		$.each(results.incidents, function(i, status) {
+			var element = results.elements[status[elementIdField]];
+			message += "<p>" + settings.contentType + " " + status.id + ": " + element.type + " " + element.typeSubtype + " " + element.name + " " + status.name + " " + status.status + "</p>";
 		});
 		$("#incidentPanel").html(message);
 	}, function() {
