@@ -17,6 +17,7 @@ uptimeGadget.registerOnLoadHandler(function(onLoadData) {
 uptimeGadget.registerOnEditHandler(showEditPanel);
 
 $(function() {
+	$("#incidentPanelGadget").tooltip();
 	$("#editPanel").hide();
 	if (showEditPanelOnDocLoad) {
 		showEditPanel();
@@ -24,7 +25,6 @@ $(function() {
 });
 
 function renderIncidentPanel(settings) {
-	$("#incidentPanelGadget").tooltip();
 	getGroupNames(settings.groupIdFilter, function(groups) {
 		var groupsMarkup = "";
 		$.each(groups, function(i, group) {
@@ -68,10 +68,10 @@ function onLoadSettingsSuccess(settings) {
 	}
 	initEditPanel();
 
-	var statusBar = $("#statusBar");
-	statusBar.css("color", "green");
-	statusBar.text("Loaded and READY!");
-	statusBar.show().fadeOut(2000);
+//	var statusBar = $("#statusBar");
+//	statusBar.css("color", "green");
+//	statusBar.text("Loaded and READY!");
+//	statusBar.show().fadeOut(2000);
 
 	resetUpdateInterval();
 
