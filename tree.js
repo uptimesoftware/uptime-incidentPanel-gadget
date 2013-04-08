@@ -4,11 +4,11 @@ function Tree(data) {
 	this.data = data;
 
 	this.addChild = function(child) {
-		if (!this.firstChild) {
+		var next = this.firstChild;
+		if (!next) {
 			this.firstChild = child;
 			return;
 		}
-		var next = this;
 		while (next.nextSibling) {
 			next = next.nextSibling;
 		}
@@ -16,14 +16,16 @@ function Tree(data) {
 	};
 }
 
-function tree_walk(tree, visitor) {
+function tree_walk(tree, visitor, depth) {
 	if (!tree) {
 		return;
 	}
-	visitor(tree.data);
+	depth = depth || 0;
+	visitor(tree.data, depth);
 	tree = tree.firstChild;
+	depth++;
 	while (tree) {
-		tree_walk(tree, visitor);
+		tree_walk(tree, visitor, depth);
 		tree = tree.nextSibling;
 	}
 }

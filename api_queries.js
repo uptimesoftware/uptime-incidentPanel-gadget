@@ -34,35 +34,32 @@ function getGroupTree(groupId, groups) {
 	return groupTreeInfo.treeNodes[groupId];
 }
 
-function getIdsIn(groupId, idName, onSuccess, onError) {
-	if (!groupId) {
-		onError();
-		return;
+function getIndentPrefix(prefix, repeat) {
+	var repeatedPrefix = "";
+	var indent = repeat;
+	while (indent-- > 0) {
+		repeatedPrefix += prefix;
 	}
-	if (idName != "elements" && idName != "monitors") {
-		onError();
-		return;
-	}
+	return repeatedPrefix;
+}
+
+function getGroupNames(onSuccess, onError) {
 	$.ajax("/api/v1/groups", {
 		cache : false,
 		success : function(data, textStatus, jqXHR) {
-			var groupTree = getGroupTree(groupId, data);
-			if (!groupTree) {
+			var groupTreeInfo = buildGroupTree(data);
+			if (!groupTreeInfo) {
 				onError();
 				return;
 			}
-			var ids = [];
-			tree_walk(groupTree, function(group) {
+			var groups = [];
+			tree_walk(groupTreeInfo.rootTree, function(group, depth) {
 				if (!group) {
 					return;
 				}
-				$.each(group[idName], function(i, item) {
-					if (item && item.isMonitored) {
-						ids.push(item.id);
-					}
-				});
+				groups.push({id: group.id, name: getIndentPrefix("-", depth - 1) + group.name});
 			});
-			onSuccess(ids);
+			onSuccess(groups);
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 			onError();

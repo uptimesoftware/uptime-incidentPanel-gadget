@@ -32,7 +32,7 @@ function renderIncidentPanel(settings) {
 		});
 		$("#incidentPanel").html(message);
 	}, function() {
-		message += "<p>getIdsIn returned an error</p>";
+		message += "<p>getStatusesIn returned an error</p>";
 		$("#incidentPanel").html(message);
 	});
 }
@@ -78,18 +78,26 @@ function resetUpdateInterval() {
 function populateEditPanelGroups() {
 	var groups = $("#groups");
 	groups.find('option').remove().end().append($("<option />").val(-1).text("All"));
-	$.ajax("/api/v1/groups", {
-		cache : false,
-		success : function(data, textStatus, jqXHR) {
-			$(data).each(function(i, group) {
-				groups.append($("<option />").val(group.id).text(group.name));
-			});
-			groups.val(incidentPanelSettings.groupIdFilter);
-		},
-		error : function(jqXHR, textStatus, errorThrown) {
-			groups.val(-1);
-		}
+	getGroupNames(function(data) {
+		$.each(data, function(i, group) {
+			groups.append($("<option />").val(group.id).text(group.name));
+		});
+		groups.val(incidentPanelSettings.groupIdFilter);
+	}, function() {
+		groups.val(-1);
 	});
+//	$.ajax("/api/v1/groups", {
+//		cache : false,
+//		success : function(data, textStatus, jqXHR) {
+//			$(data).each(function(i, group) {
+//				groups.append($("<option />").val(group.id).text(group.name));
+//			});
+//			groups.val(incidentPanelSettings.groupIdFilter);
+//		},
+//		error : function(jqXHR, textStatus, errorThrown) {
+//			groups.val(-1);
+//		}
+//	});
 }
 
 function initEditPanel() {
