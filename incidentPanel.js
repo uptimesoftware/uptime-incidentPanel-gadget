@@ -86,18 +86,6 @@ function populateEditPanelGroups() {
 	}, function() {
 		groups.val(-1);
 	});
-//	$.ajax("/api/v1/groups", {
-//		cache : false,
-//		success : function(data, textStatus, jqXHR) {
-//			$(data).each(function(i, group) {
-//				groups.append($("<option />").val(group.id).text(group.name));
-//			});
-//			groups.val(incidentPanelSettings.groupIdFilter);
-//		},
-//		error : function(jqXHR, textStatus, errorThrown) {
-//			groups.val(-1);
-//		}
-//	});
 }
 
 function initEditPanel() {
