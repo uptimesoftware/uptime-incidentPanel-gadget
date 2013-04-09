@@ -5,6 +5,12 @@ var escapeHTML = (function () {
     };
 }());
 
+function renderIncidentsSummary(contentType, statusCounts) {
+	var html = "";
+	html += "<p>" + contentType + " counts: Crit: " + statusCounts.CRIT + ", Other: " + statusCounts.OTHER + ", Ok: " + statusCounts.OK + "</p>";
+	return html;
+}
+
 function renderIncidentsTable(contentType, incidents, elements) {
 	var html = "";
 	var elementIdField = contentType == "elements" ? "id" : "elementId";

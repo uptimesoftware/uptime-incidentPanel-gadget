@@ -40,6 +40,8 @@ function renderIncidentPanel(settings) {
 	});
 	var message = '<p>TODO render table ' + setIntervalId + '</p>';
 	getIncidentsIn(settings.groupIdFilter, settings.contentType, function(results) {
+		var incidentsSummary = renderIncidentsSummary(settings.contentType, results.statusCounts);
+		$("#incidentPanelSummaryDiv").html(incidentsSummary);
 		var incidentsTable = renderIncidentsTable(settings.contentType, results.incidents, results.elements);
 		$("#incidentPanelTableDiv").html(incidentsTable);
 	}, function() {

@@ -170,14 +170,24 @@ function getIncidentsIn(groupId, idName, onSuccess, onError) {
 	}
 	var idField = (idName == "elements") ? "id" : "elementId";
 	getStatusesIn(groupId, idName, function(results) {
-		var statusesToShow = $.map(results, function(status, i) {
-			return ("OK" == status.status) ? null : status;
+		var statusCounts = { CRIT: 0, OTHER: 0, OK: 0 };
+		var statusesToShow = [];
+		$.each(results, function(i, status) {
+			if ("OK" == status.status) {
+				statusCounts.OK++;
+			} else if ("CRIT" == status.status) {
+				statusesToShow.push(status);
+				statusCounts.CRIT++;
+			} else {
+				statusesToShow.push(status);
+				statusCounts.OTHER++;
+			}
 		});
 		var elementIds = uniq($.map(statusesToShow, function(status, i) {
 			return status[idField];
 		}));
 		getElements(elementIds, function(elems) {
-			onSuccess({incidents: statusesToShow, elements: elems});
+			onSuccess({incidents: statusesToShow, elements: elems, statusCounts: statusCounts});
 		}, onError);
 	}, onError);
 }
