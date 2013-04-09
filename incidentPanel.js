@@ -28,23 +28,23 @@ function renderIncidentPanel(settings) {
 	getGroupNames(settings.groupIdFilter, function(groups) {
 		var groupsMarkup = "";
 		$.each(groups, function(i, group) {
-			groupsMarkup += group.name + "<br/>";
+			groupsMarkup += escapeHTML(group.name) + "<br/>";
 		});
 		if (settings.groupIdFilter < 0) {
-			$("#incidentPanelGroup").html("Group: All").prop('title', groupsMarkup);
+			$("#incidentPanelGroupDiv").text("Group: All").prop('title', groupsMarkup);
 			return;
 		}
-		$("#incidentPanelGroup").html("Group: " + groups[0].name).prop('title', groupsMarkup);
+		$("#incidentPanelGroupDiv").text("Group: " + groups[0].name).prop('title', groupsMarkup);
 	}, function() {
-		$("#incidentPanelGroup").html("Could not load groups");
+		$("#incidentPanelGroupDiv").text("Could not load groups");
 	});
 	var message = '<p>TODO render table ' + setIntervalId + '</p>';
 	getIncidentsIn(settings.groupIdFilter, settings.contentType, function(results) {
 		var incidentsTable = renderIncidentsTable(settings.contentType, results.incidents, results.elements);
-		$("#incidentPanelTable").html(incidentsTable);
+		$("#incidentPanelTableDiv").html(incidentsTable);
 	}, function() {
 		message += "<p>getIncidentsIn returned an error</p>";
-		$("#incidentPanelTable").html(message);
+		$("#incidentPanelTableDiv").html(message);
 	});
 }
 

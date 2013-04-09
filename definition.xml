@@ -65,9 +65,11 @@
 		</div>
 		
 		<div id="incidentPanel">
-			<div id="incidentPanelGroup">
+			<div id="incidentPanelGroupDiv">
 			</div>
-			<div id="incidentPanelTable">
+			<div id="incidentPanelTableDiv">
+				<table id="incidentPanelTable">
+				</table>
 			</div>
 		</div>
 	</div>
