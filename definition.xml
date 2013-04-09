@@ -28,6 +28,9 @@
 		src="__UPTIME_GADGET_BASE__/api_queries.js">
 	</script>
 	<script type="text/javascript"
+		src="__UPTIME_GADGET_BASE__/render_incident_panel.js">
+	</script>
+	<script type="text/javascript"
 		src="__UPTIME_GADGET_BASE__/incidentPanel.js">
 	</script>
 </head>

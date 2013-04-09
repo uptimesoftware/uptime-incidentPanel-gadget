@@ -134,6 +134,7 @@ function getElements(ids, onSuccess, onError) {
 	$.each(ids, function(i, id) {
 		deferreds.push($.ajax("/api/v1/elements/" + id, {
 			cache : false,
+			dataType: "json",
 			success : function(data, textStatus, jqXHR) {
 				elements[data.id] = data;
 			},

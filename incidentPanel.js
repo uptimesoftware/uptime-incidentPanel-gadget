@@ -40,15 +40,10 @@ function renderIncidentPanel(settings) {
 	});
 	var message = '<p>TODO render table ' + setIntervalId + '</p>';
 	getIncidentsIn(settings.groupIdFilter, settings.contentType, function(results) {
-		var elementIdField = settings.contentType == "elements" ? "id" : "elementId";
-		$.each(results.incidents, function(i, status) {
-			var element = results.elements[status[elementIdField]];
-			message += "<p>" + settings.contentType + " " + status.id + ": " + element.type + " " + element.typeSubtype + " "
-					+ element.name + " " + status.name + " " + status.status + "</p>";
-		});
-		$("#incidentPanelTable").html(message);
+		var incidentsTable = renderIncidentsTable(settings.contentType, results.incidents, results.elements);
+		$("#incidentPanelTable").html(incidentsTable);
 	}, function() {
-		message += "<p>getStatusesIn returned an error</p>";
+		message += "<p>getIncidentsIn returned an error</p>";
 		$("#incidentPanelTable").html(message);
 	});
 }
