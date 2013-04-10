@@ -43,6 +43,17 @@ function renderIncidentPanel(settings) {
 		$("#incidentPanelSummaryDiv").html(incidentsSummary);
 		var incidentsTable = renderIncidentsTable(settings.contentType, results.incidents, results.elements);
 		$("#incidentPanelTableDiv").html(incidentsTable);
+		// TODO add links and other interaction
+		$('tr.incident').click(function() {
+			window.top.location.href = $('a:first', this).attr('href');
+		}).hover(function() {
+			if ($(this).find("th").length > 0) {
+				return;
+			}
+			$(this).addClass("incidentHover");
+		}, function() {
+			$(this).removeClass("incidentHover");
+		});
 	}, function() {
 		$("#incidentPanelTableDiv").html("<p>getIncidentsIn returned an error</p>");
 	});
@@ -63,11 +74,11 @@ function onLoadSettingsSuccess(settings) {
 	}
 	initEditPanel();
 
-//	var statusBar = $("#statusBar");
-//	statusBar.css("color", "green");
-//	statusBar.text("Loaded and READY!");
-//	statusBar.show().fadeOut(2000);
-	
+	// var statusBar = $("#statusBar");
+	// statusBar.css("color", "green");
+	// statusBar.text("Loaded and READY!");
+	// statusBar.show().fadeOut(2000);
+
 	resetUpdateInterval();
 
 	if (!settings) {

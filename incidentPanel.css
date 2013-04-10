@@ -4,3 +4,64 @@
 	padding: 10px;
 	background-color: #FDFDFD;
 }
+
+#incidentPanel table {
+    border-collapse: collapse;
+}
+
+#incidentPanel td {
+    padding: 5px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: #BDBDBD;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #BDBDBD;
+}
+
+.incident a {
+    color: #565E6C;
+    text-decoration: none;
+}
+
+.incident.incidentHover a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.incident.incidentHover {
+    color: #000000;
+    cursor: pointer;
+}
+
+.incident.CRIT {
+	background-color: #F5A9BC;
+}
+
+.incident.incidentHover.CRIT {
+	background-color: #F7819F;
+}
+
+.incident.WARN {
+	background-color: #F3F781;
+}
+
+.incident.incidentHover.WARN {
+	background-color: #FFFF00;
+}
+
+.incident.UNKNOWN {
+	background-color: #E6E6E6;
+}
+
+.incident.incidentHover.UNKNOWN {
+	background-color: #BDBDBD;
+}
+
+.incident.MAINT {
+	background-color: #E2A9F3;
+}
+
+.incident.incidentHover.MAINT {
+	background-color: #D358F7;
+}

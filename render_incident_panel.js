@@ -14,8 +14,14 @@ var escapeHTML = (function() {
 	};
 }());
 
-function cell(data, field) {
-	return '<td class="' + field + '">' + escapeHTML(data[field]) + "</td>";
+function cell(data, field, link) {
+	var linkPrefix = "";
+	var linkSuffix = "";
+	if (link) {
+		linkPrefix = '<a href="' + link + '">';
+		linkSuffix = "</a>";
+	}
+	return '<td class="' + field + '">' + linkPrefix + escapeHTML(data[field]) + linkSuffix + "</td>";
 }
 
 function renderIncidentsSummary(contentType, statusCounts) {
@@ -53,14 +59,14 @@ var incidentsTableSort = (function() {
 function incidentsTableCells(contentType, status) {
 	var element = status.element;
 	if (contentType == "elements") {
-		return cell(element, "type") + cell(element, "typeSubtype") + cell(element, "name") + cell(status, "status");
+		return cell(element, "type") + cell(element, "typeSubtype") + cell(element, "name", uptimeGadget.getElementUrls(element.id, element.name).graphing) + cell(status, "status");
 	}
-	return cell(element, "type") + cell(element, "typeSubtype") + cell(element, "name") + cell(status, "name")
+	return cell(element, "type") + cell(element, "typeSubtype") + cell(element, "name") + cell(status, "name", uptimeGadget.getMonitorUrl(status.id))
 			+ cell(status, "status");
 }
 
 function renderIncidentsTable(contentType, incidents, elements) {
-	var html = '<table>';
+	var html = '<table class="incidentsTable">';
 	var elementIdField = contentType == "elements" ? "id" : "elementId";
 	var incidentsAndElements = $.map(incidents, function(incident, i) {
 		incident.element = elements[incident[elementIdField]];
@@ -68,7 +74,7 @@ function renderIncidentsTable(contentType, incidents, elements) {
 	});
 	incidentsAndElements.sort(incidentsTableSort);
 	$.each(incidentsAndElements, function(i, status) {
-		html += '<tr class="' + contentType + " " + status.status + '">';
+		html += '<tr class="incident ' + contentType + " " + status.status + '">';
 		html += incidentsTableCells(contentType, status);
 		html += "</tr>";
 	});
