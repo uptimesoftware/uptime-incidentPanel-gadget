@@ -30,11 +30,12 @@ function renderIncidentPanel(settings) {
 		$.each(groups, function(i, group) {
 			groupsMarkup += escapeHTML(group.name) + "<br/>";
 		});
+		var titleText = (settings.contentType == "elements") ? "Element Incidents in " : "Monitor Incidents in ";
 		if (settings.groupIdFilter < 0) {
-			$("#incidentPanelGroupDiv").text("Group: All").prop('title', groupsMarkup);
+			$("#incidentPanelGroupDiv").text(titleText + "All Groups").prop('title', groupsMarkup);
 			return;
 		}
-		$("#incidentPanelGroupDiv").text("Group: " + groups[0].name).prop('title', groupsMarkup);
+		$("#incidentPanelGroupDiv").text(titleText + groups[0].name).prop('title', groupsMarkup);
 	}, function() {
 		$("#incidentPanelGroupDiv").text("Could not load groups");
 	});
@@ -43,7 +44,6 @@ function renderIncidentPanel(settings) {
 		$("#incidentPanelSummaryDiv").html(incidentsSummary);
 		var incidentsTable = renderIncidentsTable(settings.contentType, results.incidents, results.elements);
 		$("#incidentPanelTableDiv").html(incidentsTable);
-		// TODO add links and other interaction
 		$('tr.incident').click(function() {
 			window.top.location.href = $('a:first', this).attr('href');
 		}).hover(function() {

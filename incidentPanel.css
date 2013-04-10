@@ -10,46 +10,88 @@ body {
 	background-color: #FDFDFD;
 }
 
-#incidentPanel table {
-    border-collapse: collapse;
+#incidentPanelGroupDiv {
+	font-size: larger;
 }
 
-#incidentPanel td {
-    padding: 5px;
-    border-top-style: solid;
-    border-top-width: 1px;
-    border-top-color: #FFFFFF;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: #FFFFFF;
+#incidentPanel table {
+	width: 98%;
+	border-collapse: collapse;
+}
+
+#incidentPanelSummaryDiv table {
+	border-collapse: separate;
+	border-spacing: 10px;
+}
+
+.incidentsSummary td {
+	padding : 10px;
+	width: 33%;
+	border-radius: 5px;
+}
+
+.incidentSummary {
+	vertical-align: middle;
+	text-align: center;
+}
+
+.incidentSummary.CRIT {
+	color: #FFFFFF;
+	background-color: #B61211;
+}
+
+.incidentSummary.OTHER {
+	background-color: #DAD60B;
+}
+
+.incidentSummary.OK {
+	background-color: #67B10B;
+}
+
+.incidentSummaryCount {
+	font-size: x-large;
+}
+
+.incidentSummaryLegend {
+	font-size: normal;
+}
+
+.incidentsTable td {
+	padding: 5px;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-top-color: #FFFFFF;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #FFFFFF;
 }
 
 .incident a {
-    color: #565E6C;
-    text-decoration: none;
+	color: #565E6C;
+	text-decoration: none;
 }
 
 .incident.incidentHover a {
-    color: #000000;
-    text-decoration: none;
+	color: #000000;
+	text-decoration: none;
 }
 
 .incident.CRIT a {
-    color: #FFFFFF;
+	color: #FFFFFF;
 }
 
 .incident.incidentHover {
-    color: #000000;
-    cursor: pointer;
+	color: #000000;
+	cursor: pointer;
 }
 
 .incident.CRIT {
-    color: #FFFFFF;
+	color: #FFFFFF;
 	background-color: #FF3333;
 }
 
 .incident.incidentHover.CRIT {
-    color: #FFFFFF;
+	color: #FFFFFF;
 	background-color: #B61211;
 }
 

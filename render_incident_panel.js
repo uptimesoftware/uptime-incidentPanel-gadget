@@ -25,10 +25,16 @@ function cell(data, field, link) {
 }
 
 function renderIncidentsSummary(contentType, statusCounts) {
-	var html = "";
-	html += "<p>" + contentType + " counts: Crit: " + statusCounts.CRIT + ", Other: " + statusCounts.OTHER + ", Ok: "
-			+ statusCounts.OK + "</p>";
-	return html;
+	var html = '<table class="incidentsSummary">';
+	html += '<tr><td class="incidentSummary CRIT"><div class="incidentSummaryCount">'
+			+ statusCounts.CRIT
+			+ '</div><div class="incidentSummaryLegend">CRIT</div></td>' 
+			+ '<td class="incidentSummary OTHER"><div class="incidentSummaryCount">'
+			+ statusCounts.OTHER
+			+ '</div><div class="incidentSummaryLegend">OTHER</div></td>'
+			+ '<td class="incidentSummary OK"><div class="incidentSummaryCount">'
+			+ statusCounts.OK + '</div><div class="incidentSummaryLegend">OK</div></td></tr>';
+	return html + "</table>";
 }
 
 var incidentsTableSort = (function() {
@@ -59,10 +65,11 @@ var incidentsTableSort = (function() {
 function incidentsTableCells(contentType, status) {
 	var element = status.element;
 	if (contentType == "elements") {
-		return cell(element, "type") + cell(element, "typeSubtype") + cell(element, "name", uptimeGadget.getElementUrls(element.id, element.name).graphing) + cell(status, "status");
+		return cell(element, "type") + cell(element, "typeSubtype")
+				+ cell(element, "name", uptimeGadget.getElementUrls(element.id, element.name).graphing) + cell(status, "status");
 	}
-	return cell(element, "type") + cell(element, "typeSubtype") + cell(element, "name") + cell(status, "name", uptimeGadget.getMonitorUrl(status.id))
-			+ cell(status, "status");
+	return cell(element, "type") + cell(element, "typeSubtype") + cell(element, "name")
+			+ cell(status, "name", uptimeGadget.getMonitorUrl(status.id)) + cell(status, "status");
 }
 
 function renderIncidentsTable(contentType, incidents, elements) {
