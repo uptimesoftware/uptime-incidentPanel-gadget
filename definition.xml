@@ -8,7 +8,7 @@
 <![CDATA[ 
 <html>
 <head>
-	#includeResources(uptimecss,jquery,jqueryUi)
+	#includeResources(uptimecss,jquery,jqueryui)
 	<title>Incident Panel</title>
 	
 	<link rel="stylesheet" type="text/css"
