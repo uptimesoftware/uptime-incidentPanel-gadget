@@ -38,15 +38,13 @@ function renderIncidentPanel(settings) {
 	}, function() {
 		$("#incidentPanelGroupDiv").text("Could not load groups");
 	});
-	var message = '<p>TODO render table ' + setIntervalId + '</p>';
 	getIncidentsIn(settings.groupIdFilter, settings.contentType, function(results) {
 		var incidentsSummary = renderIncidentsSummary(settings.contentType, results.statusCounts);
 		$("#incidentPanelSummaryDiv").html(incidentsSummary);
 		var incidentsTable = renderIncidentsTable(settings.contentType, results.incidents, results.elements);
 		$("#incidentPanelTableDiv").html(incidentsTable);
 	}, function() {
-		message += "<p>getIncidentsIn returned an error</p>";
-		$("#incidentPanelTableDiv").html(message);
+		$("#incidentPanelTableDiv").html("<p>getIncidentsIn returned an error</p>");
 	});
 }
 
@@ -69,7 +67,7 @@ function onLoadSettingsSuccess(settings) {
 //	statusBar.css("color", "green");
 //	statusBar.text("Loaded and READY!");
 //	statusBar.show().fadeOut(2000);
-
+	
 	resetUpdateInterval();
 
 	if (!settings) {

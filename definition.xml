@@ -70,8 +70,6 @@
 			<div id="incidentPanelSummaryDiv">
 			</div>
 			<div id="incidentPanelTableDiv">
-				<table id="incidentPanelTable">
-				</table>
 			</div>
 		</div>
 	</div>
