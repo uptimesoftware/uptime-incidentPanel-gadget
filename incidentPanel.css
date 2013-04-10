@@ -1,3 +1,8 @@
+body {
+	height: 100%;
+	width: 100%;
+}
+
 #editPanel {
 	border: 2px #BDBDBD solid;
 	border-radius: 5px;
@@ -13,10 +18,10 @@
     padding: 5px;
     border-top-style: solid;
     border-top-width: 1px;
-    border-top-color: #BDBDBD;
+    border-top-color: #FFFFFF;
     border-bottom-style: solid;
     border-bottom-width: 1px;
-    border-bottom-color: #BDBDBD;
+    border-bottom-color: #FFFFFF;
 }
 
 .incident a {
@@ -29,17 +34,23 @@
     text-decoration: none;
 }
 
+.incident.CRIT a {
+    color: #FFFFFF;
+}
+
 .incident.incidentHover {
     color: #000000;
     cursor: pointer;
 }
 
 .incident.CRIT {
-	background-color: #F5A9BC;
+    color: #FFFFFF;
+	background-color: #FF3333;
 }
 
 .incident.incidentHover.CRIT {
-	background-color: #F7819F;
+    color: #FFFFFF;
+	background-color: #B61211;
 }
 
 .incident.WARN {
@@ -47,7 +58,7 @@
 }
 
 .incident.incidentHover.WARN {
-	background-color: #FFFF00;
+	background-color: #DAD60B;
 }
 
 .incident.UNKNOWN {
