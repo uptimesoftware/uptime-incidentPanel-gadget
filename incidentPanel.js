@@ -16,6 +16,8 @@ uptimeGadget.registerOnLoadHandler(function(onLoadData) {
 
 uptimeGadget.registerOnEditHandler(showEditPanel);
 
+uptimeGadget.registerOnResizeHandler($.debounce(500, resizeIncidentPanelTable));
+
 $(function() {
 	$("#incidentPanelGadget").tooltip();
 	$("#editPanel").hide();
@@ -63,9 +65,15 @@ function renderIncidentPanel(settings) {
 		}, function() {
 			$(this).removeClass("incidentHover");
 		});
+		resizeIncidentPanelTable();
 	}, function() {
 		$("#incidentPanelTableDiv").html("<p>getIncidentsIn returned an error</p>");
 	});
+}
+
+function resizeIncidentPanelTable() {
+	var heightOfOtherDivs = $('#incidentPanelGroupDiv').height() + $('#incidentPanelSummaryDiv').height() + $('#incidentPanelBarChartDiv').height();
+	$('#incidentPanelTableDiv').height($(window).height() - heightOfOtherDivs - 10);
 }
 
 function showEditPanel() {

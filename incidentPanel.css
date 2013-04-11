@@ -7,6 +7,10 @@ html, body {
 	background-color: #ffffff;
 }
 
+#incidentPanelGadget {
+	width: 98%
+}
+
 #editPanel {
 	border: 2px #BDBDBD solid;
 	border-radius: 5px;
@@ -19,7 +23,7 @@ html, body {
 }
 
 #incidentPanel table {
-	width: 98%;
+	width: 100%;
 	border-collapse: collapse;
 }
 
@@ -74,6 +78,10 @@ html, body {
 
 .incidentPanelBarChart.OK {
 	background-color: #67B10B;
+}
+
+#incidentPanelTableDiv {
+	overflow-y: auto;
 }
 
 .incidentsTable td {
