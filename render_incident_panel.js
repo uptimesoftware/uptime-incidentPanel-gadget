@@ -24,19 +24,6 @@ function cell(data, field, link) {
 	return '<td class="' + field + '">' + linkPrefix + escapeHTML(data[field]) + linkSuffix + "</td>";
 }
 
-function renderIncidentsSummary(contentType, statusCounts) {
-	var html = '<table class="incidentsSummary">';
-	html += '<tr><td class="incidentSummary CRIT"><div class="incidentSummaryCount">'
-			+ statusCounts.CRIT
-			+ '</div><div class="incidentSummaryLegend">CRIT</div></td>' 
-			+ '<td class="incidentSummary OTHER"><div class="incidentSummaryCount">'
-			+ statusCounts.OTHER
-			+ '</div><div class="incidentSummaryLegend">OTHER</div></td>'
-			+ '<td class="incidentSummary OK"><div class="incidentSummaryCount">'
-			+ statusCounts.OK + '</div><div class="incidentSummaryLegend">OK</div></td></tr>';
-	return html + "</table>";
-}
-
 var incidentsTableSort = (function() {
 	var statusMap = {
 		'CRIT' : 0,
@@ -86,4 +73,36 @@ function renderIncidentsTable(contentType, incidents, elements) {
 		html += "</tr>";
 	});
 	return html + "</table>";
+}
+
+function getIncidentsBarChartCellWidth(count, total) {
+	var percent = Math.round(count * 100 / total);
+	if (percent < 1) {
+		percent = 1;
+	}
+	return percent;
+}
+
+function getIncidentsBarChartCell(percent, count, countType) {
+	return '<td width="' + percent + '%" class="incidentPanelBarChart ' + countType + '" title="' + count + '">&nbsp;</td>';
+}
+
+function renderIncidentsBarChartPercentages(counts) {
+	var total = counts.CRIT + counts.OTHER + counts.OK;
+	if (total == 0) {
+		return '<td width="100%" class="incidentPanelBarChart OK"></td>';
+	}
+	var html = '';
+	var critWidth = 0;
+	if (counts.CRIT > 0) {
+		critWidth = getIncidentsBarChartCellWidth(counts.CRIT, total);
+		html += getIncidentsBarChartCell(critWidth, counts.CRIT, 'CRIT');
+	}
+	var otherWidth = 0;
+	if (counts.OTHER > 0) {
+		otherWidth = getIncidentsBarChartCellWidth(counts.OTHER, total);
+		html += getIncidentsBarChartCell(otherWidth, counts.OTHER, 'OTHER');
+	}
+	html += getIncidentsBarChartCell((100 - critWidth - otherWidth), counts.OK, 'OK');
+	return html;
 }

@@ -40,8 +40,17 @@ function renderIncidentPanel(settings) {
 		$("#incidentPanelGroupDiv").text("Could not load groups");
 	});
 	getIncidentsIn(settings.groupIdFilter, settings.contentType, function(results) {
-		var incidentsSummary = renderIncidentsSummary(settings.contentType, results.statusCounts);
-		$("#incidentPanelSummaryDiv").html(incidentsSummary);
+		$('#incidentPanelSummaryDiv div.incidentSummaryCount').each(function() {
+			var $this = $(this);
+			if ($this.hasClass('CRIT')) {
+				$this.text(results.statusCounts.CRIT);
+			} else if ($this.hasClass('OTHER')) {
+				$this.text(results.statusCounts.OTHER);
+			} else {
+				$this.text(results.statusCounts.OK);
+			}
+		});
+		$('#incidentPanelBarChartRow').html(renderIncidentsBarChartPercentages(results.statusCounts));
 		var incidentsTable = renderIncidentsTable(settings.contentType, results.incidents, results.elements);
 		$("#incidentPanelTableDiv").html(incidentsTable);
 		$('tr.incident').click(function() {

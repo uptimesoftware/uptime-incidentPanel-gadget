@@ -8,7 +8,7 @@
 <![CDATA[ 
 <html>
 <head>
-	#includeResources(uptimecss,jquery,jqueryui)
+	#includeResources(jquery,jqueryui)
 	<title>Incident Panel</title>
 	
 	<link rel="stylesheet" type="text/css"
@@ -65,11 +65,25 @@
 		</div>
 		
 		<div id="incidentPanel">
-			<div id="incidentPanelGroupDiv">
+			<div id="incidentPanelGroupDiv">&nbsp;
 			</div>
 			<div id="incidentPanelSummaryDiv">
+				<table class="incidentsSummary">
+					<tr>
+						<td class="incidentSummary CRIT">
+							<div class="incidentSummaryCount CRIT">&nbsp;</div>
+							<div class="incidentSummaryLegend">CRIT</div></td>
+						<td class="incidentSummary OTHER">
+							<div class="incidentSummaryCount OTHER">&nbsp;</div>
+							<div class="incidentSummaryLegend">OTHER</div></td>
+						<td class="incidentSummary OK">
+							<div class="incidentSummaryCount OK">&nbsp;</div>
+							<div class="incidentSummaryLegend">OK</div></td>
+					</tr>
+				</table>
 			</div>
 			<div id="incidentPanelBarChartDiv">
+				<table class="incidentPanelBarChart"><tr id="incidentPanelBarChartRow"><td>&nbsp;</td></tr></table>
 			</div>
 			<div id="incidentPanelTableDiv">
 			</div>

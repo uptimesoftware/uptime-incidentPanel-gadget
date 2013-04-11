@@ -1,6 +1,10 @@
-body {
+html, body {
 	height: 100%;
 	width: 100%;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	color: #565E6C;
+	background-color: #ffffff;
 }
 
 #editPanel {
@@ -54,6 +58,22 @@ body {
 
 .incidentSummaryLegend {
 	font-size: normal;
+}
+
+.incidentPanelBarChart {
+	height: 6px;
+}
+
+.incidentPanelBarChart.CRIT {
+	background-color: #B61211;
+}
+
+.incidentPanelBarChart.OTHER {
+	background-color: #DAD60B;
+}
+
+.incidentPanelBarChart.OK {
+	background-color: #67B10B;
 }
 
 .incidentsTable td {
