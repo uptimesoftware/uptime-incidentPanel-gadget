@@ -52,11 +52,11 @@ var incidentsTableSort = (function() {
 function incidentsTableCells(contentType, status) {
 	var element = status.element;
 	if (contentType == "elements") {
-		return cell(element, "type") + cell(element, "typeSubtype")
-				+ cell(element, "name", uptimeGadget.getElementUrls(element.id, element.name).graphing) + cell(status, "status");
+		return  cell(status, "status") + cell(element, "typeName") + cell(element, "typeSubtypeName")
+				+ cell(element, "name", uptimeGadget.getElementUrls(element.id, element.name).graphing);
 	}
-	return cell(element, "type") + cell(element, "typeSubtype") + cell(element, "name")
-			+ cell(status, "name", uptimeGadget.getMonitorUrl(status.id)) + cell(status, "status");
+	return cell(status, "status") + cell(element, "typeName") + cell(element, "typeSubtypeName") + cell(element, "name")
+			+ cell(status, "name", uptimeGadget.getMonitorUrl(status.id));
 }
 
 function renderIncidentsTable(contentType, incidents, elements) {
