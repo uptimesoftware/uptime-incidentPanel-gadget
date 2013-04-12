@@ -165,6 +165,9 @@ function getIncidentsIn(groupId, idName, onSuccess, onError) {
 		var statusCounts = { CRIT: 0, OTHER: 0, OK: 0 };
 		var statusesToShow = [];
 		$.each(results, function(i, status) {
+			if (!status.isMonitored) {
+				return;
+			}
 			if ("OK" == status.status) {
 				statusCounts.OK++;
 			} else if ("CRIT" == status.status) {
