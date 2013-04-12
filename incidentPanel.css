@@ -65,6 +65,7 @@ html, body {
 }
 
 .incidentPanelBarChart {
+	font-size: 4px;
 	height: 6px;
 }
 
@@ -108,6 +109,10 @@ html, body {
 	color: #FFFFFF;
 }
 
+.incident.MAINT a {
+	color: #FFFFFF;
+}
+
 .incident.incidentHover {
 	color: #000000;
 	cursor: pointer;
@@ -140,9 +145,11 @@ html, body {
 }
 
 .incident.MAINT {
-	background-color: #E2A9F3;
+	color: #FFFFFF;
+	background-color: #777cb1;
 }
 
 .incident.incidentHover.MAINT {
-	background-color: #D358F7;
+	color: #FFFFFF;
+	background-color: #555B98;
 }
