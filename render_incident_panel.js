@@ -53,10 +53,10 @@ function incidentsTableCells(contentType, status) {
 	var element = status.element;
 	if (contentType == "elements") {
 		return  cell(status, "status") + cell(element, "typeName") + cell(element, "typeSubtypeName")
-				+ cell(element, "name", uptimeGadget.getElementUrls(element.id, element.name).graphing);
+				+ cell(element, "name", uptimeGadget.getElementUrls(element.id, element.name).services);
 	}
 	return cell(status, "status") + cell(element, "typeName") + cell(element, "typeSubtypeName") + cell(element, "name")
-			+ cell(status, "name", uptimeGadget.getMonitorUrl(status.id));
+			+ cell(status, "name", uptimeGadget.getElementUrls(element.id, element.name).services);
 }
 
 function renderIncidentsTable(contentType, incidents, elements) {
