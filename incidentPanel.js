@@ -10,7 +10,7 @@ uptimeGadget.registerOnLoadHandler(function(onLoadData) {
 	if (onLoadData.hasPreloadedSettings()) {
 		onLoadSettingsSuccess(onLoadData.settings);
 	} else {
-		uptimeGadget.loadSettings(onLoadSettingsSuccess, onError);
+		uptimeGadget.loadSettings(onLoadSettingsSuccess, onGadgetError);
 	}
 });
 
@@ -66,13 +66,24 @@ function renderIncidentPanel(settings) {
 			$(this).removeClass("incidentHover");
 		});
 		resizeIncidentPanelTable();
-	}, function() {
-		$("#incidentPanelTableDiv").html("<p>getIncidentsIn returned an error</p>");
+	}, function(jqXHR, textStatus, errorThrown) {
+		if (!jqXHR) {
+			$("#incidentPanelTableDiv").html("<p>Unknown Error loading incidents</p>");
+			return;
+		}
+		if (typeof jqXHR === "string") {
+			$("#incidentPanelTableDiv").html("<p>" + jqXHR + "</p>");
+			return;
+		}
+		$("#incidentPanelTableDiv").html(
+				"<p>Error loading incidents</p><p>" + escapeHTML(errorThrown) + ": " + this.type + " " + escapeHTML(this.url)
+						+ " returned:</p><p>" + escapeHTML(jqXHR.responseText) + "</p>");
 	});
 }
 
 function resizeIncidentPanelTable() {
-	var heightOfOtherDivs = $('#incidentPanelGroupDiv').height() + $('#incidentPanelSummaryDiv').height() + $('#incidentPanelBarChartDiv').height();
+	var heightOfOtherDivs = $('#incidentPanelGroupDiv').height() + $('#incidentPanelSummaryDiv').height()
+			+ $('#incidentPanelBarChartDiv').height();
 	$('#incidentPanelTableDiv').height($(window).height() - heightOfOtherDivs - 10);
 }
 
@@ -90,11 +101,6 @@ function onLoadSettingsSuccess(settings) {
 		$.extend(incidentPanelSettings, settings);
 	}
 	initEditPanel();
-
-	// var statusBar = $("#statusBar");
-	// statusBar.css("color", "green");
-	// statusBar.text("Loaded and READY!");
-	// statusBar.show().fadeOut(2000);
 
 	resetUpdateInterval();
 
@@ -169,17 +175,13 @@ function initEditPanel() {
 }
 
 function saveSettings() {
-	uptimeGadget.saveSettings(incidentPanelSettings, onSaveSuccess, onError);
+	uptimeGadget.saveSettings(incidentPanelSettings, onSaveSuccess, onGadgetError);
 }
 
 function onSaveSuccess(savedSettings) {
-
+	// nothing to do
 }
 
-function onError(errorObject) {
-	var statusBar = $("#statusBar");
-	statusBar.css("color", "red");
-
-	statusBar.text(errorObject.code + ": " + errorObject.description);
-	statusBar.show().fadeOut(2000);
+function onGadgetError(errorObject) {
+	$("#incidentPanelTableDiv").html(errorObject.code + ": " + errorObject.description).css("color", "red");
 }

@@ -49,7 +49,7 @@ function getGroupNames(groupId, onSuccess, onError) {
 		success : function(data, textStatus, jqXHR) {
 			var groupTree = getGroupTree(groupId, data);
 			if (!groupTree) {
-				onError();
+				onSuccess([]);
 				return;
 			}
 			var groups = [];
@@ -65,21 +65,17 @@ function getGroupNames(groupId, onSuccess, onError) {
 			});
 			onSuccess(groups);
 		},
-		error : function(jqXHR, textStatus, errorThrown) {
-			onError();
-		}
+		error : onError
 	});
 }
 
-function getDeferredGroupStatuses(groupIds, onSuccess) {
+function getDeferredGroupStatuses(groupIds, onSuccess, onError) {
 	var deferreds = [];
 	$.each(groupIds, function(i, groupId) {
 		deferreds.push($.ajax("/api/v1/groups/" + groupId + "/status", {
 			cache : false,
 			success : onSuccess,
-			error : function(jqXHR, textStatus, errorThrown) {
-				onError();
-			}
+			error : onError
 		}));
 	});
 	return deferreds;
@@ -87,11 +83,11 @@ function getDeferredGroupStatuses(groupIds, onSuccess) {
 
 function getStatusesIn(groupId, idName, onSuccess, onError) {
 	if (!groupId) {
-		onError();
+		onError("Internal error: getStatusesIn(); groupId must be defined.");
 		return;
 	}
 	if (idName != "elements" && idName != "monitors") {
-		onError();
+		onError("Internal error: getStatusesIn(); idName must be either elements or monitors.");
 		return;
 	}
 	var statusType = (idName == "elements") ? "elementStatus" : "monitorStatus";
@@ -100,7 +96,7 @@ function getStatusesIn(groupId, idName, onSuccess, onError) {
 		success : function(data, textStatus, jqXHR) {
 			var groupTree = getGroupTree(groupId, data);
 			if (!groupTree) {
-				onError();
+				onSuccess([]);
 				return;
 			}
 			var groupIds = [];
@@ -113,20 +109,18 @@ function getStatusesIn(groupId, idName, onSuccess, onError) {
 			var statuses = [];
 			var deferreds = getDeferredGroupStatuses(groupIds, function(data, textStatus, jqXHR) {
 				statuses.push.apply(statuses, data[statusType]);
-			});
-			$.when.apply($, deferreds).done(function() {
+			}, onError);
+			$.when.apply($, deferreds).then(function() {
 				onSuccess(statuses);
-			});
+			}, onError);
 		},
-		error : function(jqXHR, textStatus, errorThrown) {
-			onError();
-		}
+		error : onError
 	});
 }
 
 function getElements(ids, onSuccess, onError) {
 	if (!ids) {
-		onError();
+		onError("Internal error: getElements(); ids must be defined.");
 		return;
 	}
 	var elements = {};
@@ -138,14 +132,12 @@ function getElements(ids, onSuccess, onError) {
 			success : function(data, textStatus, jqXHR) {
 				elements[data.id] = data;
 			},
-			error : function(jqXHR, textStatus, errorThrown) {
-				onError();
-			}
+			error : onError
 		}));
 	});
-	$.when.apply($, deferreds).done(function() {
+	$.when.apply($, deferreds).then(function() {
 		onSuccess(elements);
-	});
+	}, onError);
 }
 
 function uniq(arr) {
@@ -161,11 +153,11 @@ function uniq(arr) {
 
 function getIncidentsIn(groupId, idName, onSuccess, onError) {
 	if (!groupId) {
-		onError();
+		onError("Internal error: getIncidentsIn(); groupId must be defined.");
 		return;
 	}
 	if (idName != "elements" && idName != "monitors") {
-		onError();
+		onError("Internal error: getIncidentsIn(); idName must be either elements or monitors.");
 		return;
 	}
 	var idField = (idName == "elements") ? "id" : "elementId";
