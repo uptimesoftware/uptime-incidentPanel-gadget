@@ -126,21 +126,21 @@ html {
 }
 
 .incident.CRIT {
-	color: #FFFFFF;
-	background-color: #FF3333;
+	color: #EAEAEA;
+	background-color: #B61211;
 }
 
 .incident.incidentHover.CRIT {
 	color: #FFFFFF;
-	background-color: #B61211;
+	background-color: #CC3333;
 }
 
 .incident.WARN {
-	background-color: #F3F781;
+	background-color: #DAD60B;
 }
 
 .incident.incidentHover.WARN {
-	background-color: #DAD60B;
+	background-color: #EDE900;
 }
 
 .incident.UNKNOWN {
@@ -148,15 +148,15 @@ html {
 }
 
 .incident.incidentHover.UNKNOWN {
-	background-color: #BDBDBD;
+	background-color: #D0D0D0;
 }
 
 .incident.MAINT {
-	color: #FFFFFF;
-	background-color: #777cb1;
+	color: #EAEAEA;
+	background-color: #555B98;
 }
 
 .incident.incidentHover.MAINT {
 	color: #FFFFFF;
-	background-color: #555B98;
+	background-color: #6970a1;
 }
