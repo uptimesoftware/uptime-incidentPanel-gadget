@@ -26,6 +26,7 @@ html {
 
 #incidentPanelGroupDiv {
 	font-size: larger;
+	font-weight: bold;
 }
 
 #incidentPanel table {
