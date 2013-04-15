@@ -14,14 +14,38 @@ var escapeHTML = (function() {
 	};
 }());
 
-function cell(data, field, link) {
-	var linkPrefix = "";
-	var linkSuffix = "";
-	if (link) {
-		linkPrefix = '<a href="' + link + '">';
-		linkSuffix = "</a>";
-	}
-	return '<td class="' + field + '">' + linkPrefix + escapeHTML(data[field]) + linkSuffix + "</td>";
+function identity(value) {
+	return value;
+}
+
+function cell(data, field, valueTransform) {
+	var transform = valueTransform || identity;
+	return '<td class="' + field + '">' + transform(escapeHTML(data[field])) + "</td>";
+}
+
+function getLinkTransformer(link) {
+	return function(value) {
+		var linkPrefix = '<a href="' + link + '">';
+		var linkSuffix = "</a>";
+		return linkPrefix + value + linkSuffix;
+	};
+}
+
+function parseLocaltimeFromISO8601(dateString) {
+	var parts = dateString.match(/\d+/g);
+	return new Date(parts[0], parts[1] - 1, parts[2], parts[3], parts[4], parts[5]);
+}
+
+function getDateTransformer(now) {
+	return function(dateString) {
+		var date = parseLocaltimeFromISO8601(dateString);
+		var diff = now - date;
+		var msec = diff;
+		var hh = Math.floor(msec / 1000 / 60 / 60);
+		msec -= hh * 1000 * 60 * 60;
+		var mm = Math.floor(msec / 1000 / 60);
+		return hh + "h " + mm + "m";
+	};
 }
 
 var incidentsTableSort = (function() {
@@ -49,17 +73,22 @@ var incidentsTableSort = (function() {
 	};
 }());
 
-function incidentsTableCells(contentType, status) {
+function incidentsTableCells(contentType, status, dateTransform) {
 	var element = status.element;
 	if (contentType == "elements") {
-		return cell(status, "status") + cell(element, "name", uptimeGadget.getElementUrls(element.id, element.name).services)
-				+ cell(element, "typeName") + cell(element, "typeSubtypeName");
+		return cell(status, "status")
+				+ cell(element, "name", getLinkTransformer(uptimeGadget.getElementUrls(element.id, element.name).services))
+				+ cell(element, "typeName") + cell(element, "typeSubtypeName")
+				+ cell(status, "lastTransitionTime", dateTransform);
 	}
-	return cell(status, "status") + cell(status, "name", uptimeGadget.getElementUrls(element.id, element.name).services)
-			+ cell(element, "name") + cell(element, "typeName") + cell(element, "typeSubtypeName");
+	return cell(status, "status")
+			+ cell(status, "name", getLinkTransformer(uptimeGadget.getElementUrls(element.id, element.name).services))
+			+ cell(element, "name") + cell(element, "typeName") + cell(element, "typeSubtypeName")
+			+ cell(status, "lastTransitionTime", dateTransform);
 }
 
 function renderIncidentsTable(contentType, incidents, elements) {
+	var now = new Date();
 	var html = '<table class="incidentsTable">';
 	var elementIdField = contentType == "elements" ? "id" : "elementId";
 	var incidentsAndElements = $.map(incidents, function(incident, i) {
@@ -69,7 +98,7 @@ function renderIncidentsTable(contentType, incidents, elements) {
 	incidentsAndElements.sort(incidentsTableSort);
 	$.each(incidentsAndElements, function(i, status) {
 		html += '<tr class="incident ' + contentType + " " + status.status + '">';
-		html += incidentsTableCells(contentType, status);
+		html += incidentsTableCells(contentType, status, getDateTransformer(now));
 		html += "</tr>";
 	});
 	return html + "</table>";
