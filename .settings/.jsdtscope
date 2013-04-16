@@ -3,7 +3,9 @@
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.baseBrowserLibrary"/>
-	<classpathentry kind="con" path="org.eclipse.wst.jsdt.USER_LIBRARY/jquery"/>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.USER_LIBRARY/uptimeGadget"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.USER_LIBRARY/jquery-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.USER_LIBRARY/naturalSort"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.USER_LIBRARY/uptime.link"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
