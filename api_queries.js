@@ -1,3 +1,7 @@
+function groupNameSort(group1, group2) {
+	return naturalSort(group1.name, group2.name);
+}
+
 function buildGroupTree(groups) {
 	var treeNodes = {};
 	var root = new Tree();
@@ -10,7 +14,7 @@ function buildGroupTree(groups) {
 			tree.data = group;
 		}
 		if (group.groupId == null) {
-			root.addChild(tree);
+			root.addChild(tree, groupNameSort);
 			return;
 		}
 		var parentTree = treeNodes[group.groupId];
@@ -18,7 +22,7 @@ function buildGroupTree(groups) {
 			parentTree = new Tree();
 			treeNodes[group.groupId] = parentTree;
 		}
-		parentTree.addChild(tree);
+		parentTree.addChild(tree, groupNameSort);
 	});
 	return {
 		treeNodes : treeNodes,
@@ -128,7 +132,7 @@ function getElements(ids, onSuccess, onError) {
 	$.each(ids, function(i, id) {
 		deferreds.push($.ajax("/api/v1/elements/" + id, {
 			cache : false,
-			dataType: "json",
+			dataType : "json",
 			success : function(data, textStatus, jqXHR) {
 				elements[data.id] = data;
 			},
@@ -162,7 +166,11 @@ function getIncidentsIn(groupId, idName, onSuccess, onError) {
 	}
 	var idField = (idName == "elements") ? "id" : "elementId";
 	getStatusesIn(groupId, idName, function(results) {
-		var statusCounts = { CRIT: 0, OTHER: 0, OK: 0 };
+		var statusCounts = {
+			CRIT : 0,
+			OTHER : 0,
+			OK : 0
+		};
 		var statusesToShow = [];
 		$.each(results, function(i, status) {
 			if (!status.isMonitored || (typeof status.isHidden === 'boolean' && status.isHidden)) {
@@ -182,7 +190,11 @@ function getIncidentsIn(groupId, idName, onSuccess, onError) {
 			return status[idField];
 		}));
 		getElements(elementIds, function(elems) {
-			onSuccess({incidents: statusesToShow, elements: elems, statusCounts: statusCounts});
+			onSuccess({
+				incidents : statusesToShow,
+				elements : elems,
+				statusCounts : statusCounts
+			});
 		}, onError);
 	}, onError);
 }

@@ -3,13 +3,24 @@ function Tree(data) {
 	this.nextSibling;
 	this.data = data;
 
-	this.addChild = function(child) {
+	this.addChild = function(child, sort) {
 		var next = this.firstChild;
 		if (!next) {
 			this.firstChild = child;
 			return;
 		}
+		if (sort && sort(child.data, next.data) < 0) {
+			this.firstChild = child;
+			this.firstChild.nextSibling = next;
+			return;
+		}
 		while (next.nextSibling) {
+			if (sort && sort(child.data, next.nextSibling.data) < 0) {
+				var after = next.nextSibling;
+				next.nextSibling = child;
+				child.nextSibling = after;
+				return;
+			}
 			next = next.nextSibling;
 		}
 		next.nextSibling = child;
@@ -26,20 +37,6 @@ function tree_walk(tree, visitor, depth) {
 	depth++;
 	while (tree) {
 		tree_walk(tree, visitor, depth);
-		tree = tree.nextSibling;
-	}
-}
-
-function tree_find(tree, matcher) {
-	if (!tree || matcher(tree.data)) {
-		return tree;
-	}
-	tree = tree.firstChild;
-	while (tree) {
-		var match = tree_find(tree, matcher);
-		if (match) {
-			return match;
-		}
 		tree = tree.nextSibling;
 	}
 }
