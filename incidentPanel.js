@@ -1,6 +1,7 @@
 var incidentPanelSettings = {
 	"contentType" : "elements",
 	"groupIdFilter" : -1,
+	"ignorePowerStateOff" : false,
 	"refreshInterval" : 10
 };
 var setIntervalId;
@@ -41,7 +42,7 @@ function renderIncidentPanel(settings) {
 	}, function() {
 		$("#incidentPanelGroupDiv").text("Could not load groups");
 	});
-	getIncidentsIn(settings.groupIdFilter, settings.contentType, function(results) {
+	getIncidentsIn(settings.groupIdFilter, settings.contentType, settings.ignorePowerStateOff, function(results) {
 		$('#incidentPanelSummaryDiv div.incidentSummaryCount').each(function() {
 			var $this = $(this);
 			if ($this.hasClass('CRIT')) {
@@ -143,6 +144,14 @@ function initEditPanel() {
 		saveSettings();
 	});
 	$('div.contentType').buttonset();
+	var ignorePoweredOffElements = $('#ignorePoweredOffElements');
+	if (ignorePoweredOffElements.is(':checked') === false) {
+		ignorePoweredOffElements.prop('checked', incidentPanelSettings.ignorePowerStateOff);
+	}
+	ignorePoweredOffElements.change(function() {
+		incidentPanelSettings.ignorePowerStateOff = $(this).prop('checked');
+		saveSettings();
+	});
 	var refreshRate = $("#refreshRate");
 	refreshRate.val(incidentPanelSettings.refreshInterval);
 	refreshRate.change($.debounce(500, function() {

@@ -46,6 +46,10 @@
 				<input type="radio" class="radio" name="contentType" value="monitors" id="monitorsRadio" />
 				<label for="monitorsRadio">Monitors</label>
 			</div>
+			<div class="ignorePoweredOffElements">
+				<input id="ignorePoweredOffElements" name="ignorePoweredOffElements" type="checkbox" />
+				<label for="ignorePoweredOffElements">Ignore Powered Off VMs & vSphere Elements</label>
+			</div>
 			<div class="groups">
 				<label for="groups">Display Groups (including subgroups):</label>
 				<select id="groups" />

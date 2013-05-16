@@ -155,7 +155,12 @@ function uniq(arr) {
 	});
 }
 
-function getIncidentsIn(groupId, idName, onSuccess, onError) {
+function shouldIgnore(status, ignorePowerStateOff) {
+	return !status.isMonitored || (typeof status.isHidden === 'boolean' && status.isHidden)
+			|| (ignorePowerStateOff && (status.powerState && status.powerState == "Off"));
+}
+
+function getIncidentsIn(groupId, idName, ignorePowerStateOff, onSuccess, onError) {
 	if (!groupId) {
 		onError("Internal error: getIncidentsIn(); groupId must be defined.");
 		return;
@@ -173,7 +178,7 @@ function getIncidentsIn(groupId, idName, onSuccess, onError) {
 		};
 		var statusesToShow = [];
 		$.each(results, function(i, status) {
-			if (!status.isMonitored || (typeof status.isHidden === 'boolean' && status.isHidden)) {
+			if (shouldIgnore(status, ignorePowerStateOff)) {
 				return;
 			}
 			if ("OK" == status.status) {
