@@ -1,3 +1,13 @@
+function getAjaxError(jqXHR, textStatus, errorThrown, type, url) {
+	return {
+		jqXHR : jqXHR,
+		textStatus : textStatus,
+		errorThrown : errorThrown,
+		type : type,
+		url : url
+	};
+}
+
 function groupNameSort(group1, group2) {
 	return naturalSort(group1.name, group2.name);
 }
@@ -47,101 +57,115 @@ function getIndentPrefix(prefix, repeat) {
 	return repeatedPrefix;
 }
 
-function getGroupNames(groupId, onSuccess, onError) {
+function getGroupNames(groupId) {
+	var deferred = UPTIME.pub.gadgets.promises.defer();
 	$.ajax("/api/v1/groups", {
-		cache : false,
-		success : function(data, textStatus, jqXHR) {
-			var groupTree = getGroupTree(groupId, data);
-			if (!groupTree) {
-				onSuccess([]);
+		cache : false
+	}).done(function(data, textStatus, jqXHR) {
+		var groupTree = getGroupTree(groupId, data);
+		if (!groupTree) {
+			deferred.resolve([]);
+			return;
+		}
+		var groups = [];
+		var depthOffset = (groupId < 0) ? -1 : 0;
+		tree_walk(groupTree, function(group, depth) {
+			if (!group) {
 				return;
 			}
-			var groups = [];
-			var depthOffset = (groupId < 0) ? -1 : 0;
-			tree_walk(groupTree, function(group, depth) {
-				if (!group) {
-					return;
-				}
-				groups.push({
-					id : group.id,
-					name : getIndentPrefix("-", depth + depthOffset) + group.name
-				});
+			groups.push({
+				id : group.id,
+				name : getIndentPrefix("-", depth + depthOffset) + group.name
 			});
-			onSuccess(groups);
-		},
-		error : onError
+		});
+		deferred.resolve(groups);
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		deferred.reject(getAjaxError(jqXHR, textStatus, errorThrown, this.type, this.url));
 	});
+	return deferred.promise;
 }
 
-function getDeferredGroupStatuses(groupIds, onSuccess, onError) {
-	var deferreds = [];
+function getGroupStatuses(groupIds, statusType) {
+	var promises = [];
 	$.each(groupIds, function(i, groupId) {
-		deferreds.push($.ajax("/api/v1/groups/" + groupId + "/status", {
-			cache : false,
-			success : onSuccess,
-			error : onError
-		}));
+		var deferred = UPTIME.pub.gadgets.promises.defer();
+		$.ajax("/api/v1/groups/" + groupId + "/status", {
+			cache : false
+		}).done(function(data, textStatus, jqXHR) {
+			deferred.resolve(data);
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			deferred.reject(getAjaxError(jqXHR, textStatus, errorThrown, this.type, this.url));
+		});
+		promises.push(deferred.promise);
 	});
-	return deferreds;
+	var statuses = [];
+	return UPTIME.pub.gadgets.promises.all(promises).then(function(allData) {
+		$.each(allData, function(i, data) {
+			statuses.push.apply(statuses, data[statusType]);
+		});
+		return statuses;
+	});
 }
 
-function getStatusesIn(groupId, idName, onSuccess, onError) {
+function getStatusesIn(groupId, idName) {
 	if (!groupId) {
-		onError("Internal error: getStatusesIn(); groupId must be defined.");
-		return;
+		return UPTIME.pub.gadgets.promises.reject("Internal error: getStatusesIn(); groupId must be defined.");
 	}
 	if (idName != "elements" && idName != "monitors") {
-		onError("Internal error: getStatusesIn(); idName must be either elements or monitors.");
-		return;
+		return UPTIME.pub.gadgets.promises.reject("Internal error: getStatusesIn(); idName must be either elements or monitors.");
 	}
 	var statusType = (idName == "elements") ? "elementStatus" : "monitorStatus";
+	var deferred = UPTIME.pub.gadgets.promises.defer();
 	$.ajax("/api/v1/groups", {
-		cache : false,
-		success : function(data, textStatus, jqXHR) {
-			var groupTree = getGroupTree(groupId, data);
-			if (!groupTree) {
-				onSuccess([]);
+		cache : false
+	}).done(function(data, textStatus, jqXHR) {
+		var groupTree = getGroupTree(groupId, data);
+		if (!groupTree) {
+			onSuccess([]);
+			return;
+		}
+		var groupIds = [];
+		tree_walk(groupTree, function(group) {
+			if (!group) {
 				return;
 			}
-			var groupIds = [];
-			tree_walk(groupTree, function(group) {
-				if (!group) {
-					return;
-				}
-				groupIds.push(group.id);
-			});
-			var statuses = [];
-			var deferreds = getDeferredGroupStatuses(groupIds, function(data, textStatus, jqXHR) {
-				statuses.push.apply(statuses, data[statusType]);
-			}, onError);
-			$.when.apply($, deferreds).then(function() {
-				onSuccess(statuses);
-			}, onError);
-		},
-		error : onError
+			groupIds.push(group.id);
+		});
+		getGroupStatuses(groupIds, statusType).then(function(statuses) {
+			deferred.resolve(statuses);
+		}, function(jqXHR, textStatus, errorThrown) {
+			deferred.reject(getAjaxError(jqXHR, textStatus, errorThrown, this.type, this.url));
+		});
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		deferred.reject(getAjaxError(jqXHR, textStatus, errorThrown, this.type, this.url));
 	});
+	return deferred.promise;
 }
 
-function getElements(ids, onSuccess, onError) {
+function getElements(ids) {
 	if (!ids) {
-		onError("Internal error: getElements(); ids must be defined.");
-		return;
+		return UPTIME.pub.gadgets.promises.reject("Internal error: getElements(); ids must be defined.");
 	}
-	var elements = {};
-	var deferreds = [];
+	var promises = [];
 	$.each(ids, function(i, id) {
-		deferreds.push($.ajax("/api/v1/elements/" + id, {
+		var deferred = UPTIME.pub.gadgets.promises.defer();
+		$.ajax("/api/v1/elements/" + id, {
 			cache : false,
-			dataType : "json",
-			success : function(data, textStatus, jqXHR) {
-				elements[data.id] = data;
-			},
-			error : onError
-		}));
+			dataType : "json"
+		}).done(function(data, textStatus, jqXHR) {
+			deferred.resolve(data);
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			deferred.reject(getAjaxError(jqXHR, textStatus, errorThrown, this.type, this.url));
+		});
+		promises.push(deferred.promise);
 	});
-	$.when.apply($, deferreds).then(function() {
-		onSuccess(elements);
-	}, onError);
+	return UPTIME.pub.gadgets.promises.all(promises).then(function(allData) {
+		var elements = {};
+		$.each(allData, function(i, data) {
+			elements[data.id] = data;
+		});
+		return elements;
+	});
 }
 
 function uniq(arr) {
@@ -160,24 +184,25 @@ function shouldIgnore(status, ignorePowerStateOff) {
 			|| (ignorePowerStateOff && (status.powerState && status.powerState == "Off"));
 }
 
-function getIncidentsIn(groupId, idName, ignorePowerStateOff, onSuccess, onError) {
+function getIncidentsIn(groupId, idName, ignorePowerStateOff) {
 	if (!groupId) {
-		onError("Internal error: getIncidentsIn(); groupId must be defined.");
+		return UPTIME.pub.gadgets.promises.reject("Internal error: getIncidentsIn(); groupId must be defined.");
 		return;
 	}
 	if (idName != "elements" && idName != "monitors") {
-		onError("Internal error: getIncidentsIn(); idName must be either elements or monitors.");
+		return UPTIME.pub.gadgets.promises
+				.reject("Internal error: getIncidentsIn(); idName must be either elements or monitors.");
 		return;
 	}
 	var idField = (idName == "elements") ? "id" : "elementId";
-	getStatusesIn(groupId, idName, function(results) {
-		var statusCounts = {
-			CRIT : 0,
-			OTHER : 0,
-			OK : 0
-		};
-		var statusesToShow = [];
-		$.each(results, function(i, status) {
+	var statusCounts = {
+		CRIT : 0,
+		OTHER : 0,
+		OK : 0
+	};
+	var statusesToShow = [];
+	return getStatusesIn(groupId, idName).then(function(statuses) {
+		$.each(statuses, function(i, status) {
 			if (shouldIgnore(status, ignorePowerStateOff)) {
 				return;
 			}
@@ -194,12 +219,12 @@ function getIncidentsIn(groupId, idName, ignorePowerStateOff, onSuccess, onError
 		var elementIds = uniq($.map(statusesToShow, function(status, i) {
 			return status[idField];
 		}));
-		getElements(elementIds, function(elems) {
-			onSuccess({
-				incidents : statusesToShow,
-				elements : elems,
-				statusCounts : statusCounts
-			});
-		}, onError);
-	}, onError);
+		return getElements(elementIds);
+	}).then(function(elems) {
+		return {
+			incidents : statusesToShow,
+			elements : elems,
+			statusCounts : statusCounts
+		};
+	});
 }

@@ -27,59 +27,73 @@ $(function() {
 	}
 });
 
-function renderIncidentPanel(settings) {
-	getGroupNames(settings.groupIdFilter, function(groups) {
-		var groupsMarkup = "";
-		$.each(groups, function(i, group) {
-			groupsMarkup += escapeHTML(group.name) + "<br/>";
-		});
-		var titleText = (settings.contentType == "elements") ? "Element Incidents in " : "Monitor Incidents in ";
-		if (settings.groupIdFilter < 0) {
-			$("#incidentPanelGroupDiv").text(titleText + "All Groups").prop('title', groupsMarkup);
-			return;
-		}
-		$("#incidentPanelGroupDiv").text(titleText + groups[0].name).prop('title', groupsMarkup);
-	}, function() {
-		$("#incidentPanelGroupDiv").text("Could not load groups");
+function renderGroupText(groups, settings) {
+	var groupsMarkup = "";
+	$.each(groups, function(i, group) {
+		groupsMarkup += escapeHTML(group.name) + "<br/>";
 	});
-	getIncidentsIn(settings.groupIdFilter, settings.contentType, settings.ignorePowerStateOff, function(results) {
-		$('#incidentPanelSummaryDiv div.incidentSummaryCount').each(function() {
-			var $this = $(this);
-			if ($this.hasClass('CRIT')) {
-				$this.text(results.statusCounts.CRIT);
-			} else if ($this.hasClass('OTHER')) {
-				$this.text(results.statusCounts.OTHER);
-			} else {
-				$this.text(results.statusCounts.OK);
-			}
-		});
-		$('#incidentPanelBarChartRow').html(renderIncidentsBarChartPercentages(results.statusCounts));
-		var incidentsTable = renderIncidentsTable(settings.contentType, results.incidents, results.elements);
-		$("#incidentPanelTableDiv").html(incidentsTable);
-		$('tr.incident').click(function() {
-			window.top.location.href = $('a:first', this).attr('href');
-		}).hover(function() {
-			if ($(this).find("th").length > 0) {
-				return;
-			}
-			$(this).addClass("incidentHover");
-		}, function() {
-			$(this).removeClass("incidentHover");
-		});
-		resizeIncidentPanelTable();
-	}, function(jqXHR, textStatus, errorThrown) {
-		if (!jqXHR) {
-			$("#incidentPanelTableDiv").html("<p>Unknown Error loading incidents</p>");
-			return;
-		}
-		if (typeof jqXHR === "string") {
-			$("#incidentPanelTableDiv").html("<p>" + jqXHR + "</p>");
-			return;
-		}
+	var titleText = (settings.contentType == "elements") ? "Element Incidents in " : "Monitor Incidents in ";
+	if (settings.groupIdFilter < 0) {
+		$("#incidentPanelGroupDiv").text(titleText + "All Groups").prop('title', groupsMarkup);
+		return;
+	}
+	$("#incidentPanelGroupDiv").text(titleText + groups[0].name).prop('title', groupsMarkup);
+}
+
+function renderIncidentPanelTableError(error) {
+	if (!error) {
+		$("#incidentPanelTableDiv").html("<p>Unknown Error loading incidents</p>");
+		return;
+	}
+	if (typeof error === "string") {
+		$("#incidentPanelTableDiv").html("<p>" + error + "</p>");
+		return;
+	}
+	if (error.jqXHR) {
 		$("#incidentPanelTableDiv").html(
-				"<p>Error loading incidents</p><p>" + escapeHTML(errorThrown) + ": " + this.type + " " + escapeHTML(this.url)
-						+ " returned:</p><p>" + escapeHTML(jqXHR.responseText) + "</p>");
+				"<p>Error loading incidents</p><p>" + escapeHTML(error.errorThrown) + ": " + error.type + " "
+						+ escapeHTML(error.url) + " returned:</p><p>" + escapeHTML(error.jqXHR.responseText) + "</p>");
+		return;
+	}
+	$("#incidentPanelTableDiv").html("<p>Unknown Error loading incidents</p>");
+}
+
+function renderIncidentPanelTable(results, settings) {
+	$('#incidentPanelSummaryDiv div.incidentSummaryCount').each(function() {
+		var $this = $(this);
+		if ($this.hasClass('CRIT')) {
+			$this.text(results.statusCounts.CRIT);
+		} else if ($this.hasClass('OTHER')) {
+			$this.text(results.statusCounts.OTHER);
+		} else {
+			$this.text(results.statusCounts.OK);
+		}
 	});
+	$('#incidentPanelBarChartRow').html(renderIncidentsBarChartPercentages(results.statusCounts));
+	var incidentsTable = renderIncidentsTable(settings.contentType, results.incidents, results.elements);
+	document.getElementById("incidentPanelTableDiv").innerHTML = incidentsTable;
+	$('tr.incident').click(function() {
+		window.top.location.href = $('a:first', this).attr('href');
+	}).hover(function() {
+		if ($(this).find("th").length > 0) {
+			return;
+		}
+		$(this).addClass("incidentHover");
+	}, function() {
+		$(this).removeClass("incidentHover");
+	});
+	resizeIncidentPanelTable();
+}
+
+function renderIncidentPanel(settings) {
+	getGroupNames(settings.groupIdFilter).then(function(groups) {
+		renderGroupText(groups, settings);
+	}, function() {
+		$("#incidentPanelGroupDiv").text("Error: Could not load groups");
+	});
+	getIncidentsIn(settings.groupIdFilter, settings.contentType, settings.ignorePowerStateOff).then(function(results) {
+		renderIncidentPanelTable(results, settings);
+	}, renderIncidentPanelTableError);
 }
 
 function resizeIncidentPanelTable() {
@@ -124,7 +138,7 @@ function resetUpdateInterval() {
 function populateEditPanelGroups() {
 	var groups = $("#groups");
 	groups.find('option').remove().end().append($("<option />").val(-1).text("All"));
-	getGroupNames(-1, function(data) {
+	getGroupNames(-1).then(function(data) {
 		$.each(data, function(i, group) {
 			groups.append($("<option />").val(group.id).text(group.name));
 		});
