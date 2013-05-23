@@ -150,8 +150,7 @@ function getElements(ids) {
 	$.each(ids, function(i, id) {
 		var deferred = UPTIME.pub.gadgets.promises.defer();
 		$.ajax("/api/v1/elements/" + id, {
-			cache : false,
-			dataType : "json"
+			cache : false
 		}).done(function(data, textStatus, jqXHR) {
 			deferred.resolve(data);
 		}).fail(function(jqXHR, textStatus, errorThrown) {
