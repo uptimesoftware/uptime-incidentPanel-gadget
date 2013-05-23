@@ -186,12 +186,10 @@ function shouldIgnore(status, ignorePowerStateOff) {
 function getIncidentsIn(groupId, idName, ignorePowerStateOff) {
 	if (!groupId) {
 		return UPTIME.pub.gadgets.promises.reject("Internal error: getIncidentsIn(); groupId must be defined.");
-		return;
 	}
 	if (idName != "elements" && idName != "monitors") {
 		return UPTIME.pub.gadgets.promises
 				.reject("Internal error: getIncidentsIn(); idName must be either elements or monitors.");
-		return;
 	}
 	var idField = (idName == "elements") ? "id" : "elementId";
 	var statusCounts = {
