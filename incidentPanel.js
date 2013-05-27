@@ -11,7 +11,7 @@ uptimeGadget.registerOnLoadHandler(function(onLoadData) {
 	if (onLoadData.hasPreloadedSettings()) {
 		onLoadSettingsSuccess(onLoadData.settings);
 	} else {
-		uptimeGadget.loadSettings(onLoadSettingsSuccess, onGadgetError);
+		uptimeGadget.loadSettings().then(onLoadSettingsSuccess, onGadgetError);
 	}
 });
 
@@ -198,7 +198,7 @@ function initEditPanel() {
 }
 
 function saveSettings() {
-	uptimeGadget.saveSettings(incidentPanelSettings, onSaveSuccess, onGadgetError);
+	uptimeGadget.saveSettings(incidentPanelSettings).then(onSaveSuccess, onGadgetError);
 }
 
 function onSaveSuccess(savedSettings) {
