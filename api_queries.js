@@ -1,13 +1,3 @@
-function getAjaxError(jqXHR, textStatus, errorThrown, type, url) {
-	return {
-		jqXHR : jqXHR,
-		textStatus : textStatus,
-		errorThrown : errorThrown,
-		type : type,
-		url : url
-	};
-}
-
 function groupNameSort(group1, group2) {
 	return naturalSort(group1.name, group2.name);
 }
@@ -80,7 +70,7 @@ function getGroupNames(groupId) {
 		});
 		deferred.resolve(groups);
 	}).fail(function(jqXHR, textStatus, errorThrown) {
-		deferred.reject(getAjaxError(jqXHR, textStatus, errorThrown, this.type, this.url));
+		deferred.reject(UPTIME.pub.errors.toDisplayableJQueryAjaxError(jqXHR, textStatus, errorThrown, this));
 	});
 	return deferred.promise;
 }
@@ -94,7 +84,7 @@ function getGroupStatuses(groupIds, statusType) {
 		}).done(function(data, textStatus, jqXHR) {
 			deferred.resolve(data);
 		}).fail(function(jqXHR, textStatus, errorThrown) {
-			deferred.reject(getAjaxError(jqXHR, textStatus, errorThrown, this.type, this.url));
+			deferred.reject(UPTIME.pub.errors.toDisplayableJQueryAjaxError(jqXHR, textStatus, errorThrown, this));
 		});
 		promises.push(deferred.promise);
 	});
@@ -134,10 +124,10 @@ function getStatusesIn(groupId, idName) {
 		getGroupStatuses(groupIds, statusType).then(function(statuses) {
 			deferred.resolve(statuses);
 		}, function(jqXHR, textStatus, errorThrown) {
-			deferred.reject(getAjaxError(jqXHR, textStatus, errorThrown, this.type, this.url));
+			deferred.reject(UPTIME.pub.errors.toDisplayableJQueryAjaxError(jqXHR, textStatus, errorThrown, this));
 		});
 	}).fail(function(jqXHR, textStatus, errorThrown) {
-		deferred.reject(getAjaxError(jqXHR, textStatus, errorThrown, this.type, this.url));
+		deferred.reject(UPTIME.pub.errors.toDisplayableJQueryAjaxError(jqXHR, textStatus, errorThrown, this));
 	});
 	return deferred.promise;
 }
@@ -154,7 +144,7 @@ function getElements(ids) {
 		}).done(function(data, textStatus, jqXHR) {
 			deferred.resolve(data);
 		}).fail(function(jqXHR, textStatus, errorThrown) {
-			deferred.reject(getAjaxError(jqXHR, textStatus, errorThrown, this.type, this.url));
+			deferred.reject(UPTIME.pub.errors.toDisplayableJQueryAjaxError(jqXHR, textStatus, errorThrown, this));
 		});
 		promises.push(deferred.promise);
 	});

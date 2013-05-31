@@ -17,6 +17,14 @@ html {
 	width: 98%
 }
 
+#notificationPanel {
+	position: absolute;
+	top: 10px;
+	left: 0px;
+	display: none;
+	width: 100%;
+}
+
 #editPanel {
 	border: 2px #BDBDBD solid;
 	border-radius: 5px;

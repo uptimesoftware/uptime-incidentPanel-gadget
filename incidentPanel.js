@@ -11,7 +11,9 @@ uptimeGadget.registerOnLoadHandler(function(onLoadData) {
 	if (onLoadData.hasPreloadedSettings()) {
 		onLoadSettingsSuccess(onLoadData.settings);
 	} else {
-		uptimeGadget.loadSettings().then(onLoadSettingsSuccess, onGadgetError);
+		uptimeGadget.loadSettings().then(onLoadSettingsSuccess, function(error) {
+			renderIncidentPanelError(error, "Error Loading Gadget Settings");
+		});
 	}
 });
 
@@ -27,6 +29,11 @@ $(function() {
 	}
 });
 
+function clearNotificationPanel() {
+	$('#notificationPanel').slideUp().empty();
+	$('#incidentPanel').fadeTo('slow', 1);
+}
+
 function renderGroupText(groups, settings) {
 	var groupsMarkup = "";
 	$.each(groups, function(i, group) {
@@ -40,25 +47,16 @@ function renderGroupText(groups, settings) {
 	$("#incidentPanelGroupDiv").text(titleText + groups[0].name).prop('title', groupsMarkup);
 }
 
-function renderIncidentPanelTableError(error) {
-	if (!error) {
-		$("#incidentPanelTableDiv").html("<p>Unknown Error loading incidents</p>");
-		return;
-	}
-	if (typeof error === "string") {
-		$("#incidentPanelTableDiv").html("<p>" + error + "</p>");
-		return;
-	}
-	if (error.jqXHR) {
-		$("#incidentPanelTableDiv").html(
-				"<p>Error loading incidents</p><p>" + escapeHTML(error.errorThrown) + ": " + error.type + " "
-						+ escapeHTML(error.url) + " returned:</p><p>" + escapeHTML(error.jqXHR.responseText) + "</p>");
-		return;
-	}
-	$("#incidentPanelTableDiv").html("<p>Unknown Error loading incidents</p>");
+function renderIncidentPanelError(error, msg) {
+	var notificationPanel = $('#notificationPanel').empty();
+	var errorBox = uptimeErrorFormatter.getErrorBox(error, msg);
+	errorBox.appendTo(notificationPanel);
+	$('#incidentPanel').fadeTo('slow', 0.3);
+	notificationPanel.slideDown();
 }
 
 function renderIncidentPanelTable(results, settings) {
+	clearNotificationPanel();
 	$('#incidentPanelSummaryDiv div.incidentSummaryCount').each(function() {
 		var $this = $(this);
 		if ($this.hasClass('CRIT')) {
@@ -93,7 +91,9 @@ function renderIncidentPanel(settings) {
 	});
 	getIncidentsIn(settings.groupIdFilter, settings.contentType, settings.ignorePowerStateOff).then(function(results) {
 		renderIncidentPanelTable(results, settings);
-	}, renderIncidentPanelTableError);
+	}, function(error) {
+		renderIncidentPanelError(error, "Error Loading Incident Data");
+	});
 }
 
 function resizeIncidentPanelTable() {
@@ -112,6 +112,7 @@ function hideEditPanel() {
 }
 
 function onLoadSettingsSuccess(settings) {
+	clearNotificationPanel();
 	if (settings) {
 		$.extend(incidentPanelSettings, settings);
 	}
@@ -198,13 +199,11 @@ function initEditPanel() {
 }
 
 function saveSettings() {
-	uptimeGadget.saveSettings(incidentPanelSettings).then(onSaveSuccess, onGadgetError);
+	uptimeGadget.saveSettings(incidentPanelSettings).then(onSaveSuccess, function(error) {
+		renderIncidentPanelError(error, "Error Saving Gadget Settings");
+	});
 }
 
 function onSaveSuccess(savedSettings) {
-	// nothing to do
-}
-
-function onGadgetError(errorObject) {
-	$("#incidentPanelTableDiv").html(errorObject.code + ": " + errorObject.description).css("color", "red");
+	clearNotificationPanel();
 }

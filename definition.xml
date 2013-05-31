@@ -88,6 +88,8 @@
 			</div>
 		</div>
 	</div>
+	
+	<div id="notificationPanel"></div>
 
 	<span style="position: fixed" id="incidentPanelTooltip"></span>
 
