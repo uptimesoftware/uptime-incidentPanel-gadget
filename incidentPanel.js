@@ -99,7 +99,7 @@ function renderIncidentPanel(settings) {
 function resizeIncidentPanelTable() {
 	var heightOfOtherDivs = $('#incidentPanelGroupDiv').height() + $('#incidentPanelSummaryDiv').height()
 			+ $('#incidentPanelBarChartDiv').height();
-	$('#incidentPanelTableDiv').height($(window).height() - heightOfOtherDivs - 10);
+	$('#incidentPanelTableDiv').height($(window).height() - heightOfOtherDivs);
 }
 
 function showEditPanel() {

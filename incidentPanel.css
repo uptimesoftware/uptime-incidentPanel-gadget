@@ -11,10 +11,17 @@ html {
 	font-size: 9px;
 	color: #565E6C;
 	background-color: #ffffff;
+	margin: 0px;
+}
+
+body {
+	width: 100%;
+	margin: 0px;
 }
 
 #incidentPanelGadget {
-	width: 98%
+	width: 100%;
+	margin: 0px;
 }
 
 #notificationPanel {
@@ -30,6 +37,11 @@ html {
 	border-radius: 5px;
 	padding: 10px;
 	background-color: #FDFDFD;
+}
+
+#incidentPanel {
+	padding-left: 2px;
+	padding-right: 2px;
 }
 
 #incidentPanelGroupDiv {
