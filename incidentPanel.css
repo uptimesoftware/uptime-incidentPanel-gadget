@@ -127,7 +127,7 @@ body {
 	text-decoration: none;
 }
 
-.incident.incidentHover a {
+.incident a:hover {
 	color: #000000;
 	text-decoration: none;
 }
@@ -140,7 +140,7 @@ body {
 	color: #FFFFFF;
 }
 
-.incident.incidentHover {
+.incident:hover {
 	color: #000000;
 	cursor: pointer;
 }
@@ -150,7 +150,7 @@ body {
 	background-color: #B61211;
 }
 
-.incident.incidentHover.CRIT {
+.incident.CRIT:hover {
 	color: #FFFFFF;
 	background-color: #CC3333;
 }
@@ -159,7 +159,7 @@ body {
 	background-color: #DAD60B;
 }
 
-.incident.incidentHover.WARN {
+.incident.WARN:hover {
 	background-color: #EDE900;
 }
 
@@ -167,7 +167,7 @@ body {
 	background-color: #E6E6E6;
 }
 
-.incident.incidentHover.UNKNOWN {
+.incident.UNKNOWN:hover {
 	background-color: #D0D0D0;
 }
 
@@ -176,7 +176,7 @@ body {
 	background-color: #555B98;
 }
 
-.incident.incidentHover.MAINT {
+.incident.MAINT:hover {
 	color: #FFFFFF;
 	background-color: #6970a1;
 }

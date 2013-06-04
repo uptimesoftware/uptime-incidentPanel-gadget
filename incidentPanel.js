@@ -72,13 +72,6 @@ function renderIncidentPanelTable(results, settings) {
 	document.getElementById("incidentPanelTableDiv").innerHTML = incidentsTable;
 	$('tr.incident').click(function() {
 		window.top.location.href = $('a:first', this).attr('href');
-	}).hover(function() {
-		if ($(this).find("th").length > 0) {
-			return;
-		}
-		$(this).addClass("incidentHover");
-	}, function() {
-		$(this).removeClass("incidentHover");
 	});
 	resizeIncidentPanelTable();
 }
