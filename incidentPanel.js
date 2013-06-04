@@ -55,6 +55,10 @@ function renderIncidentPanelError(error, msg) {
 	notificationPanel.slideDown();
 }
 
+function onTableRowClick(e) {
+	window.top.location.href = $('a:first', e.currentTarget).attr('href');
+}
+
 function renderIncidentPanelTable(results, settings) {
 	clearNotificationPanel();
 	$('#incidentPanelSummaryDiv div.incidentSummaryCount').each(function() {
@@ -69,10 +73,9 @@ function renderIncidentPanelTable(results, settings) {
 	});
 	$('#incidentPanelBarChartRow').html(renderIncidentsBarChartPercentages(results.statusCounts));
 	var incidentsTable = renderIncidentsTable(settings.contentType, results.incidents, results.elements);
+	$('tr.incident').off('click');
 	document.getElementById("incidentPanelTableDiv").innerHTML = incidentsTable;
-	$('tr.incident').click(function() {
-		window.top.location.href = $('a:first', this).attr('href');
-	});
+	$('tr.incident').click(onTableRowClick);
 	resizeIncidentPanelTable();
 }
 
