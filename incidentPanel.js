@@ -6,6 +6,7 @@ var incidentPanelSettings = {
 };
 var setIntervalId;
 var showEditPanelOnDocLoad = false;
+var divsToDim = [ '#editPanel', '#incidentPanel' ];
 
 uptimeGadget.registerOnLoadHandler(function(onLoadData) {
 	if (onLoadData.hasPreloadedSettings()) {
@@ -31,7 +32,7 @@ $(function() {
 
 function clearNotificationPanel() {
 	$('#notificationPanel').slideUp().empty();
-	$('#incidentPanel').fadeTo('slow', 1);
+	gadgetDimOff();
 }
 
 function renderGroupText(groups, settings) {
@@ -51,7 +52,7 @@ function renderIncidentPanelError(error, msg) {
 	var notificationPanel = $('#notificationPanel').empty();
 	var errorBox = uptimeErrorFormatter.getErrorBox(error, msg);
 	errorBox.appendTo(notificationPanel);
-	$('#incidentPanel').fadeTo('slow', 0.3);
+	gadgetDimOn();
 	notificationPanel.slideDown();
 }
 
@@ -108,6 +109,24 @@ function enableSettings() {
 	$('.incident-panel-setting').prop('disabled', false);
 	$('div.contentType').buttonset('enable');
 	$('#closeButton').prop('disabled', false).removeClass("ui-state-disabled");
+}
+
+function gadgetDimOn() {
+	$.each(divsToDim, function(i, d) {
+		var div = $(d);
+		if (div.is(':visible') && div.css('opacity') > 0.6) {
+			div.fadeTo('slow', 0.3);
+		}
+	});
+}
+
+function gadgetDimOff() {
+	$.each(divsToDim, function(i, d) {
+		var div = $(d);
+		if (div.is(':visible') && div.css('opacity') < 0.6) {
+			div.fadeTo('slow', 1);
+		}
+	});
 }
 
 function showEditPanel() {
