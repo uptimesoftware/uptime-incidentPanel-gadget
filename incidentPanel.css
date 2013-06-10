@@ -49,19 +49,6 @@
 	text-align: center;
 }
 
-.incidentSummary.CRIT {
-	color: #FFFFFF;
-	background-color: #B61211;
-}
-
-.incidentSummary.OTHER {
-	background-color: #DAD60B;
-}
-
-.incidentSummary.OK {
-	background-color: #67B10B;
-}
-
 .incidentSummaryCount {
 	font-size: x-large;
 }
@@ -73,18 +60,6 @@
 .incidentPanelBarChart {
 	font-size: 4px;
 	height: 6px;
-}
-
-.incidentPanelBarChart.CRIT {
-	background-color: #B61211;
-}
-
-.incidentPanelBarChart.OTHER {
-	background-color: #DAD60B;
-}
-
-.incidentPanelBarChart.OK {
-	background-color: #67B10B;
 }
 
 #incidentPanelTableDiv {
@@ -101,22 +76,14 @@
 	border-bottom-color: #FFFFFF;
 }
 
-.incident a {
-	color: #565E6C;
+a {
+	color: inherit;
 	text-decoration: none;
 }
 
-.incident a:hover {
-	color: #000000;
+a:hover {
+	text-decoration: underline;
 	text-decoration: none;
-}
-
-.incident.CRIT a {
-	color: #FFFFFF;
-}
-
-.incident.MAINT a {
-	color: #FFFFFF;
 }
 
 .incident:hover {
@@ -124,38 +91,20 @@
 	cursor: pointer;
 }
 
-.incident.CRIT {
-	color: #EAEAEA;
-	background-color: #B61211;
-}
-
-.incident.CRIT:hover {
+.incident.color-text-CRIT:hover {
 	color: #FFFFFF;
 	background-color: #CC3333;
 }
 
-.incident.WARN {
-	background-color: #DAD60B;
-}
-
-.incident.WARN:hover {
+.incident.color-text-WARN:hover {
 	background-color: #EDE900;
 }
 
-.incident.UNKNOWN {
-	background-color: #E6E6E6;
-}
-
-.incident.UNKNOWN:hover {
+.incident.color-text-UNKNOWN:hover {
 	background-color: #D0D0D0;
 }
 
-.incident.MAINT {
-	color: #EAEAEA;
-	background-color: #555B98;
-}
-
-.incident.MAINT:hover {
+.incident.color-text-MAINT:hover {
 	color: #FFFFFF;
 	background-color: #6970a1;
 }

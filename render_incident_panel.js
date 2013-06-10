@@ -97,7 +97,7 @@ function renderIncidentsTable(contentType, incidents, elements) {
 	});
 	incidentsAndElements.sort(incidentsTableSort);
 	$.each(incidentsAndElements, function(i, status) {
-		html += '<tr class="incident ' + contentType + " " + status.status + '">';
+		html += '<tr class="incident ' + contentType + " color-text-" + status.status + '">';
 		html += incidentsTableCells(contentType, status, getDateTransformer(now));
 		html += "</tr>";
 	});
@@ -119,19 +119,19 @@ function getIncidentsBarChartCell(percent, count, countType) {
 function renderIncidentsBarChartPercentages(counts) {
 	var total = counts.CRIT + counts.OTHER + counts.OK;
 	if (total == 0) {
-		return '<td width="100%" class="incidentPanelBarChart OK"></td>';
+		return '<td width="100%" class="incidentPanelBarChart color-text-OK OK"></td>';
 	}
 	var html = '';
 	var critWidth = 0;
 	if (counts.CRIT > 0) {
 		critWidth = getIncidentsBarChartCellWidth(counts.CRIT, total);
-		html += getIncidentsBarChartCell(critWidth, counts.CRIT, 'CRIT');
+		html += getIncidentsBarChartCell(critWidth, counts.CRIT, 'color-text-CRIT CRIT');
 	}
 	var otherWidth = 0;
 	if (counts.OTHER > 0) {
 		otherWidth = getIncidentsBarChartCellWidth(counts.OTHER, total);
-		html += getIncidentsBarChartCell(otherWidth, counts.OTHER, 'OTHER');
+		html += getIncidentsBarChartCell(otherWidth, counts.OTHER, 'color-text-WARN OTHER');
 	}
-	html += getIncidentsBarChartCell((100 - critWidth - otherWidth), counts.OK, 'OK');
+	html += getIncidentsBarChartCell((100 - critWidth - otherWidth), counts.OK, 'color-text-OK OK');
 	return html;
 }
