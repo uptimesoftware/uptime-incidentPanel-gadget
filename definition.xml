@@ -55,8 +55,16 @@
 				<select id="groups" />
 			</div>
 			<div class="refreshRate">
-				<label for="refreshRate">Refresh Interval (s):</label>
-				<input id="refreshRate" type="number" min="5" max="300" value="10" />
+					<label for="refreshRate">Refresh Rate:</label>
+					<select id="refreshRate" class="widget-option" name="refreshRate">
+						<option value="30">30s</option>
+						<option value="60">1m</option>
+						<option value="300">5m</option>
+						<option value="600">10m</option>
+						<option value="900">15m</option>
+						<option value="3600">1h</option>
+						<option value="-1">Never</option>
+					</select>
 			</div>
 			<div class="closeButton">
 				<button id="closeButton">Close</button>

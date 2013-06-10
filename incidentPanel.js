@@ -127,9 +127,12 @@ function resetUpdateInterval() {
 	} else {
 		renderIncidentPanel(incidentPanelSettings);
 	}
-	setIntervalId = setInterval(function() {
-		renderIncidentPanel(incidentPanelSettings);
-	}, parseInt(incidentPanelSettings.refreshInterval) * 1000);
+	var refreshInterval = parseInt(incidentPanelSettings.refreshInterval);
+	if (refreshInterval > 0) {
+		setIntervalId = setInterval(function() {
+			renderIncidentPanel(incidentPanelSettings);
+		}, refreshInterval * 1000);
+	}
 }
 
 function populateEditPanelGroups() {
@@ -166,21 +169,7 @@ function initEditPanel() {
 	var refreshRate = $("#refreshRate");
 	refreshRate.val(incidentPanelSettings.refreshInterval);
 	refreshRate.change($.debounce(500, function() {
-		var refreshRate = $(this);
-		var min = parseInt(refreshRate.attr("min"));
-		var max = parseInt(refreshRate.attr("max"));
-		var val = parseInt(refreshRate.val());
-		if (isNaN(val)) {
-			val = 10;
-		}
-		refreshRate.val(val);
-		if (val < min) {
-			refreshRate.val(min);
-		}
-		if (val > max) {
-			refreshRate.val(max);
-		}
-		incidentPanelSettings.refreshInterval = val;
+		incidentPanelSettings.refreshInterval = $(this).val();
 		resetUpdateInterval();
 		saveSettings();
 	}));
@@ -202,4 +191,5 @@ function saveSettings() {
 
 function onSaveSuccess(savedSettings) {
 	clearNotificationPanel();
+	renderIncidentPanel(incidentPanelSettings);
 }
