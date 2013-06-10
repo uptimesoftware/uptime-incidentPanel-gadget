@@ -98,8 +98,23 @@ function resizeIncidentPanelTable() {
 	$('#incidentPanelTableDiv').height($(window).height() - heightOfOtherDivs);
 }
 
+function disableSettings() {
+	$('.incident-panel-setting').prop('disabled', true);
+	$('div.contentType').buttonset('disable');
+	$('#closeButton').prop('disabled', true).addClass("ui-state-disabled");
+}
+
+function enableSettings() {
+	$('.incident-panel-setting').prop('disabled', false);
+	$('div.contentType').buttonset('enable');
+	$('#closeButton').prop('disabled', false).removeClass("ui-state-disabled");
+}
+
 function showEditPanel() {
-	populateEditPanelGroups();
+	disableSettings();
+	populateEditPanelGroups().then(function() {
+		enableSettings();
+	});
 	$("#editPanel").slideDown();
 }
 
@@ -137,8 +152,9 @@ function resetUpdateInterval() {
 
 function populateEditPanelGroups() {
 	var groups = $("#groups");
-	groups.find('option').remove().end().append($("<option />").val(-1).text("All"));
-	getGroupNames(-1).then(function(data) {
+	groups.find('option').remove().end().append($("<option />").val(-1).text("Loading..."));
+	return getGroupNames(-1).then(function(data) {
+		groups.empty().append($("<option />").val(-1).text("All"));
 		$.each(data, function(i, group) {
 			groups.append($("<option />").val(group.id).text(group.name));
 		});

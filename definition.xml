@@ -41,22 +41,22 @@
 		<div id="editPanel" class="editPanel">
 			<div class="contentType">
 				Display incidents for:
-				<input type="radio" class="radio" name="contentType" value="elements" id="elementsRadio" />
+				<input type="radio" class="radio incident-panel-setting" name="contentType" value="elements" id="elementsRadio" />
 				<label for="elementsRadio">Elements</label>
-				<input type="radio" class="radio" name="contentType" value="monitors" id="monitorsRadio" />
+				<input type="radio" class="radio incident-panel-setting" name="contentType" value="monitors" id="monitorsRadio" />
 				<label for="monitorsRadio">Monitors</label>
 			</div>
 			<div class="ignorePoweredOffElements">
-				<input id="ignorePoweredOffElements" name="ignorePoweredOffElements" type="checkbox" />
+				<input id="ignorePoweredOffElements" name="ignorePoweredOffElements" type="checkbox" class="incident-panel-setting"/>
 				<label for="ignorePoweredOffElements">Ignore Powered Off VMs & vSphere Elements</label>
 			</div>
 			<div class="groups">
 				<label for="groups">Display Groups (including subgroups):</label>
-				<select id="groups" />
+				<select id="groups" class="incident-panel-setting"/>
 			</div>
 			<div class="refreshRate">
 					<label for="refreshRate">Refresh Rate:</label>
-					<select id="refreshRate" class="widget-option" name="refreshRate">
+					<select id="refreshRate" class="incident-panel-setting" name="refreshRate">
 						<option value="30">30s</option>
 						<option value="60">1m</option>
 						<option value="300">5m</option>
