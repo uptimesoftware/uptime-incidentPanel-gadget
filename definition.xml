@@ -2,7 +2,7 @@
 <Module>
   <ModulePrefs title="Incident Panel" 
   description="Display current system or monitor incidents."
-          thumbnail="thumb.png"
+          thumbnail="incidentPanelThm.png"
   /> 
   <Content type="html">
 <![CDATA[ 
