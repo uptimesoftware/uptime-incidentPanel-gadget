@@ -12,14 +12,9 @@
 	<title>Incident Panel</title>
 	
 	<link rel="stylesheet" type="text/css"
-		href="__UPTIME_GADGET_BASE__/number-polyfill.css" />
-	<link rel="stylesheet" type="text/css"
 		href="__UPTIME_GADGET_BASE__/incidentPanel.css" />
 	<script type="text/javascript"
 		src="__UPTIME_GADGET_BASE__/jquery.ba-throttle-debounce.min.js">
-	</script>
-	<script type="text/javascript"
-		src="__UPTIME_GADGET_BASE__/number-polyfill.js">
 	</script>
 	<script type="text/javascript"
 		src="__UPTIME_GADGET_BASE__/tree.js">
