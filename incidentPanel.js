@@ -80,6 +80,15 @@ function renderIncidentPanelTable(results, settings) {
 	resizeIncidentPanelTable();
 }
 
+function scheduleRefresh() {
+	var refreshInterval = parseInt(incidentPanelSettings.refreshInterval);
+	if (refreshInterval > 0) {
+		setIntervalId = setTimeout(function() {
+			renderIncidentPanel(incidentPanelSettings);
+		}, refreshInterval * 1000);
+	}
+}
+
 function renderIncidentPanel(settings) {
 	getGroupNames(settings.groupIdFilter).then(function(groups) {
 		renderGroupText(groups, settings);
@@ -90,7 +99,7 @@ function renderIncidentPanel(settings) {
 		renderIncidentPanelTable(results, settings);
 	}, function(error) {
 		renderIncidentPanelError(error, "Error Loading Incident Data");
-	});
+	}).then(scheduleRefresh);
 }
 
 function resizeIncidentPanelTable() {
@@ -148,7 +157,7 @@ function onLoadSettingsSuccess(settings) {
 	}
 	initEditPanel();
 
-	resetUpdateInterval();
+	renderIncidentPanel(incidentPanelSettings);
 
 	if (!settings) {
 		showEditPanelOnDocLoad = true;
@@ -157,16 +166,9 @@ function onLoadSettingsSuccess(settings) {
 
 function resetUpdateInterval() {
 	if (setIntervalId) {
-		clearInterval(setIntervalId);
-	} else {
-		renderIncidentPanel(incidentPanelSettings);
+		clearTimeout(setIntervalId);
 	}
-	var refreshInterval = parseInt(incidentPanelSettings.refreshInterval);
-	if (refreshInterval > 0) {
-		setIntervalId = setInterval(function() {
-			renderIncidentPanel(incidentPanelSettings);
-		}, refreshInterval * 1000);
-	}
+	scheduleRefresh();
 }
 
 function populateEditPanelGroups() {
