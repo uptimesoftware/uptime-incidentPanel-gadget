@@ -2,7 +2,7 @@ var incidentPanelSettings = {
 	"contentType" : "elements",
 	"groupIdFilter" : -1,
 	"ignorePowerStateOff" : false,
-	"refreshInterval" : 10
+	"refreshInterval" : 30
 };
 var setIntervalId;
 var showEditPanelOnDocLoad = false;
