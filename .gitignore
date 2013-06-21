@@ -1,4 +1,7 @@
 target/
 eclipse/
-.project
 .settings/
+node_modules/
+userOptions/
+.project
+npm-debug.log
