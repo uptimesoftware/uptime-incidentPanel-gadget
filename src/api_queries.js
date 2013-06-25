@@ -75,21 +75,38 @@ function getGroupNames(groupId) {
 	return deferred.promise;
 }
 
+function createGroupFilter(groupIds) {
+	var deferred = UPTIME.pub.gadgets.promises.defer();
+	$.ajax("/api/v1/groups/filter", {
+		cache : false,
+		type : 'Post',
+		contentType : 'application/json',
+		data : JSON.stringify({
+			ids : groupIds
+		}),
+		processData : false,
+		dataType : 'json'
+	}).done(function(data, textStatus, jqXHR) {
+		deferred.resolve(data);
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		deferred.reject(UPTIME.pub.errors.toDisplayableJQueryAjaxError(jqXHR, textStatus, errorThrown, this));
+	});
+	return deferred.promise;
+}
+
 function getGroupStatuses(groupIds, statusType) {
-	var promises = [];
-	$.each(groupIds, function(i, groupId) {
+	var statuses = [];
+	return createGroupFilter(groupIds).then(function(filterId) {
 		var deferred = UPTIME.pub.gadgets.promises.defer();
-		$.ajax("/api/v1/groups/" + groupId + "/status", {
+		$.ajax("/api/v1/groups/filter/" + filterId.id + "/status", {
 			cache : false
 		}).done(function(data, textStatus, jqXHR) {
 			deferred.resolve(data);
 		}).fail(function(jqXHR, textStatus, errorThrown) {
 			deferred.reject(UPTIME.pub.errors.toDisplayableJQueryAjaxError(jqXHR, textStatus, errorThrown, this));
 		});
-		promises.push(deferred.promise);
-	});
-	var statuses = [];
-	return UPTIME.pub.gadgets.promises.all(promises).then(function(allData) {
+		return deferred.promise;
+	}).then(function(allData) {
 		$.each(allData, function(i, data) {
 			statuses.push.apply(statuses, data[statusType]);
 		});
@@ -132,23 +149,40 @@ function getStatusesIn(groupId, idName) {
 	return deferred.promise;
 }
 
+function createElementFilter(ids) {
+	var deferred = UPTIME.pub.gadgets.promises.defer();
+	$.ajax("/api/v1/elements/filter", {
+		cache : false,
+		type : 'Post',
+		contentType : 'application/json',
+		data : JSON.stringify({
+			ids : ids
+		}),
+		processData : false,
+		dataType : 'json'
+	}).done(function(data, textStatus, jqXHR) {
+		deferred.resolve(data);
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		deferred.reject(UPTIME.pub.errors.toDisplayableJQueryAjaxError(jqXHR, textStatus, errorThrown, this));
+	});
+	return deferred.promise;
+}
+
 function getElements(ids) {
 	if (!ids) {
 		return UPTIME.pub.gadgets.promises.reject("Internal error: getElements(); ids must be defined.");
 	}
-	var promises = [];
-	$.each(ids, function(i, id) {
+	return createElementFilter(ids).then(function(filterId) {
 		var deferred = UPTIME.pub.gadgets.promises.defer();
-		$.ajax("/api/v1/elements/" + id, {
+		$.ajax("/api/v1/elements/filter/" + filterId.id, {
 			cache : false
 		}).done(function(data, textStatus, jqXHR) {
 			deferred.resolve(data);
 		}).fail(function(jqXHR, textStatus, errorThrown) {
 			deferred.reject(UPTIME.pub.errors.toDisplayableJQueryAjaxError(jqXHR, textStatus, errorThrown, this));
 		});
-		promises.push(deferred.promise);
-	});
-	return UPTIME.pub.gadgets.promises.all(promises).then(function(allData) {
+		return deferred.promise;
+	}).then(function(allData) {
 		var elements = {};
 		$.each(allData, function(i, data) {
 			elements[data.id] = data;
