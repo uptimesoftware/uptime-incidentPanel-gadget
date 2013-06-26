@@ -90,12 +90,8 @@ function scheduleRefresh() {
 }
 
 function renderIncidentPanel(settings) {
-	getGroupNames(settings.groupIdFilter).then(function(groups) {
-		renderGroupText(groups, settings);
-	}, function() {
-		$("#incidentPanelGroupDiv").text("Error: Could not load groups");
-	});
 	getIncidentsIn(settings.groupIdFilter, settings.contentType, settings.ignorePowerStateOff).then(function(results) {
+		renderGroupText(results.groupNames, settings);
 		renderIncidentPanelTable(results, settings);
 	}, function(error) {
 		renderIncidentPanelError(error, "Error Loading Incident Data");
