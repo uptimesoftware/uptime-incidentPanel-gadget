@@ -169,10 +169,14 @@ function resetUpdateInterval() {
 
 function populateEditPanelGroups() {
 	var groups = $("#groups");
+	var allGroupsId = -1;
 	groups.find('option').remove().end().append($("<option />").val(-1).text("Loading..."));
-	return getGroupNames(-1).then(function(data) {
+	return getAllGroups().then(function(groups) {
+		return getGroupTree(allGroupsId, groups);
+	}).then(function(groupTree) {
+		groupNames = getGroupNames(allGroupsId, groupTree);
 		groups.empty().append($("<option />").val(-1).text("All"));
-		$.each(data, function(i, group) {
+		$.each(groupNames, function(i, group) {
 			groups.append($("<option />").val(group.id).text(group.name));
 		});
 		groups.val(incidentPanelSettings.groupIdFilter);
