@@ -1,6 +1,6 @@
 # Incident Panel Gadget
 
-> up.time gadget which displays current system or monitor incidents.
+> The incident panel provides up to the second details on current outages in your environment so that you can quickly triage and respond to incidents.
 
 ## Getting Started
 This gadget is built using Grunt `~0.4.1`.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <Module>
   <ModulePrefs title="Incident Panel" 
-  description="Display current system or monitor incidents."
+  description="The incident panel provides up to the second details on current outages in your environment so that you can quickly triage and respond to incidents."
           thumbnail="incidentPanelThm.png"
   /> 
   <Content type="html">
