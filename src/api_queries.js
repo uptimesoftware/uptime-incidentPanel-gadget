@@ -107,7 +107,14 @@ function getGroupStatuses(groupIds, statusType) {
 		return deferred.promise;
 	}).then(function(allData) {
 		$.each(allData, function(i, data) {
-			statuses.push.apply(statuses, data[statusType]);
+			if (statusType === "elementStatus"){
+				statuses.push.apply(statuses, data[statusType]);
+			} else if (statusType === "monitorStatus") { 
+				var filteredStatuses = data['monitorStatus'].slice().filter( function(obj){
+					return data['elementStatus'][obj.elementId - 1].isMonitored;
+				});			
+				statuses.push.apply(statuses, filteredStatuses);
+			};
 		});
 		return statuses;
 	});
