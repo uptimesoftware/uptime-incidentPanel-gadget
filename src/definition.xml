@@ -5,7 +5,7 @@
           thumbnail="incidentPanelThm.png"
   /> 
   <gadget_version>
-  	1.0
+  	<%= pkg.gadget_version %>
   </gadget_version>
   <grid_info>
     <supported_versions>
@@ -31,19 +31,19 @@
 	<link rel="stylesheet" type="text/css"
 		href="__UPTIME_GADGET_BASE__/incidentPanel.css" />
 	<script type="text/javascript"
-		src="__UPTIME_GADGET_BASE__/jquery.ba-throttle-debounce.min.js">
+		src="__UPTIME_GADGET_BASE__/jquery.ba-throttle-debounce.min.js?v=<%= pkg.gadget_version %>">
 	</script>
 	<script type="text/javascript"
-		src="__UPTIME_GADGET_BASE__/tree.js">
+		src="__UPTIME_GADGET_BASE__/tree.js?v=<%= pkg.gadget_version %>">
 	</script>
 	<script type="text/javascript"
-		src="__UPTIME_GADGET_BASE__/api_queries.js">
+		src="__UPTIME_GADGET_BASE__/api_queries.js?v=<%= pkg.gadget_version %>">
 	</script>
 	<script type="text/javascript"
-		src="__UPTIME_GADGET_BASE__/render_incident_panel.js">
+		src="__UPTIME_GADGET_BASE__/render_incident_panel.js?v=<%= pkg.gadget_version %>">
 	</script>
 	<script type="text/javascript"
-		src="__UPTIME_GADGET_BASE__/incidentPanel.js">
+		src="__UPTIME_GADGET_BASE__/incidentPanel.js?v=<%= pkg.gadget_version %>">
 	</script>
 </head>
 
