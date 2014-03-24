@@ -106,16 +106,22 @@ function getGroupStatuses(groupIds, statusType) {
 		});
 		return deferred.promise;
 	}).then(function(allData) {
-		$.each(allData, function(i, data) {
-			if (statusType === "elementStatus"){
+		if (statusType === "elementStatus") {
+			$.each(allData, function(i, data) {
 				statuses.push.apply(statuses, data[statusType]);
-			} else if (statusType === "monitorStatus") { 
-				var filteredStatuses = data['monitorStatus'].slice().filter( function(obj){
-					return data['elementStatus'][obj.elementId - 1].isMonitored;
-				});			
+			});
+		} else if (statusType === "monitorStatus") {
+			$.each(allData, function(i, data) {
+				var elementIdToIndexMap = {};
+				$.each(data['elementStatus'], function(idx, val) {
+					elementIdToIndexMap[val.id] = idx;
+				});
+				var filteredStatuses = $.grep(data['monitorStatus'], function(obj) {
+					return data['elementStatus'][elementIdToIndexMap[obj.elementId]].isMonitored;
+				});
 				statuses.push.apply(statuses, filteredStatuses);
-			};
-		});
+			});
+		}
 		return statuses;
 	});
 }
