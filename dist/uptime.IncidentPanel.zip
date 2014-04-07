@@ -1,0 +1,17 @@
+
+<html>
+  <head>
+    <title>404 - Not Found</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <link rel="icon" type="image/png" href="http://10.1.52.209:8081/nexus/favicon.png"><!-- Major Browsers -->
+    <!--[if IE]><link rel="SHORTCUT ICON" href="http://10.1.52.209:8081/nexus/favicon.ico"/><![endif]--><!-- Internet Explorer-->
+
+    <link rel="stylesheet" href="http://10.1.52.209:8081/nexus/static/css/Sonatype-content.css?2.5.0-04" type="text/css" media="screen" title="no title" charset="utf-8">
+  </head>
+  <body>
+    <h1>404 - Not Found</h1>
+    <p>Path /com/uptimesoftware/gadgets/uptime.TopologyTree/1.0.0/uptime.IncidentPanel-1.0.0.zip not found in local storage of repository &quot;uptime Releases&quot; [id=releases]</p>
+    
+  </body>
+</html>
