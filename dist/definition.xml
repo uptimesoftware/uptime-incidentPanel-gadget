@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+  <ModulePrefs title="Incident Panel" 
+  description="The incident panel provides up to the second details on current outages in your environment so that you can quickly triage and respond to incidents."
+          thumbnail="incidentPanelThm.png"
+  /> 
+  <gadget_version>
+  	<%= pkg.gadget_version %>
+  </gadget_version>
+  <grid_info>
+    <supported_versions>
+      7.3,7.4,7.5,7.6,7.7,8.0
+    </supported_versions>
+    <supported_platforms>
+      windows,linux
+    </supported_platforms>
+    <requires_agent_scripts>
+      false
+    </requires_agent_scripts>
+    <upgrade_in_place>
+      true
+    </upgrade_in_place>
+  </grid_info>
+  <Content type="html">
+<![CDATA[ 
+<html>
+<head>
+	#includeResources(jquery,jqueryui)
+	<title>Incident Panel</title>
+	
+	<link rel="stylesheet" type="text/css"
+		href="__UPTIME_GADGET_BASE__/incidentPanel.css" />
+	<script type="text/javascript"
+		src="__UPTIME_GADGET_BASE__/jquery.ba-throttle-debounce.min.js?v=<%= pkg.gadget_version %>">
+	</script>
+	<script type="text/javascript"
+		src="__UPTIME_GADGET_BASE__/tree.js?v=<%= pkg.gadget_version %>">
+	</script>
+	<script type="text/javascript"
+		src="__UPTIME_GADGET_BASE__/api_queries.js?v=<%= pkg.gadget_version %>">
+	</script>
+	<script type="text/javascript"
+		src="__UPTIME_GADGET_BASE__/render_incident_panel.js?v=<%= pkg.gadget_version %>">
+	</script>
+	<script type="text/javascript"
+		src="__UPTIME_GADGET_BASE__/incidentPanel.js?v=<%= pkg.gadget_version %>">
+	</script>
+</head>
+
+<body>
+
+	<div id="incidentPanelGadget">
+		<div id="editPanel" class="editPanel">
+			<div class="contentType">
+				Display incidents for:
+				<input type="radio" class="radio incident-panel-setting" name="contentType" value="elements" id="elementsRadio" />
+				<label for="elementsRadio">Elements</label>
+				<input type="radio" class="radio incident-panel-setting" name="contentType" value="monitors" id="monitorsRadio" />
+				<label for="monitorsRadio">Monitors</label>
+			</div>
+			<div class="ignorePoweredOffElements">
+				<input id="ignorePoweredOffElements" name="ignorePoweredOffElements" type="checkbox" class="incident-panel-setting"/>
+				<label for="ignorePoweredOffElements">Ignore Powered Off VMs & vSphere Elements</label>
+			</div>
+			<div class="groups">
+				<label for="groups">Display Groups (including subgroups):</label>
+				<select id="groups" class="incident-panel-setting"/>
+			</div>
+			<div class="refreshRate">
+					<label for="refreshRate">Refresh Rate:</label>
+					<select id="refreshRate" class="incident-panel-setting" name="refreshRate">
+						<option value="30">30s</option>
+						<option value="60">1m</option>
+						<option value="300">5m</option>
+						<option value="600">10m</option>
+						<option value="900">15m</option>
+						<option value="3600">1h</option>
+						<option value="-1">Never</option>
+					</select>
+			</div>
+			<div class="closeButton">
+				<button id="closeButton">Close</button>
+			</div>
+		</div>
+	
+		<div id="incidentPanel">
+			<div id="incidentPanelGroupDiv">&nbsp;
+			</div>
+			<div id="incidentPanelSummaryDiv">
+				<table class="incidentsSummary">
+					<tr>
+						<td class="incidentSummary color-text-CRIT CRIT">
+							<div class="incidentSummaryCount CRIT">&nbsp;</div>
+							<div class="incidentSummaryLegend">CRIT</div></td>
+						<td class="incidentSummary color-text-WARN OTHER">
+							<div class="incidentSummaryCount OTHER">&nbsp;</div>
+							<div class="incidentSummaryLegend">OTHER</div></td>
+						<td class="incidentSummary color-text-OK OK">
+							<div class="incidentSummaryCount OK">&nbsp;</div>
+							<div class="incidentSummaryLegend">OK</div></td>
+					</tr>
+				</table>
+			</div>
+			<div id="incidentPanelBarChartDiv">
+				<table class="incidentPanelBarChart"><tr id="incidentPanelBarChartRow"><td>&nbsp;</td></tr></table>
+			</div>
+			<div id="incidentPanelTableDiv">
+			</div>
+		</div>
+	</div>
+	
+	<div id="notificationPanel"></div>
+
+	<span style="position: fixed" id="incidentPanelTooltip"></span>
+
+</body>
+</html>
+]]>
+  </Content> 
+</Module>
